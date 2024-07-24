@@ -1,7 +1,6 @@
-/** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 
-import logo from "../television.svg"
+import logo from "../assets/television.svg"
 
 const homePageStyles = css`
     .App {
