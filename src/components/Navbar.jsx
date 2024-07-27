@@ -38,9 +38,9 @@ function Navbar() {
     return (
         <nav css={navbarStyles}>
             <ul>
-                <li><ActiveLink to="/">Home</ActiveLink></li>
-                <li><ActiveLink to="/reviews">My Reviews</ActiveLink></li>
-                <li><ActiveLink to="/friends">Friends</ActiveLink></li>
+                <ActiveLink to="/">Home</ActiveLink>
+                <ActiveLink to="/reviews">My Reviews</ActiveLink>
+                <ActiveLink to="/friends">Friends</ActiveLink>
             </ul>
         </nav>
     )
