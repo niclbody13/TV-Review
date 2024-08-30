@@ -78,10 +78,17 @@ const homePageStyles = css`
         gap: 0.25rem;
     }
 
-    li a {
+    li p {
         text-align: center;
         color: white;
         font-size: 1.15rem;
+        margin: 0;
+    }
+
+    li img{
+        border-radius: 10px;
+        box-shadow: 0 4px 8px 0 #222;
+        cursor: pointer;
     }
 
     @media (max-width: 480px) {
@@ -157,14 +164,17 @@ function HomePage() {
             {loading && <Spinner />}
             <ul>
                 {shows.map(show => (
-                    <li key={show.show.id}>
+                    <li className='showList' key={show.show.id}>
                         {show.show.image ?
-                         (<img src={show.show.image.medium} alt={`Poster for ${show.show.name}`} />) :
+                         (<img 
+                            src={show.show.image.medium}
+                            alt={`Poster for ${show.show.name}`}
+                            onClick={() => window.location.href = show.show.url} />) :
                           (
                             <img className="noImage" src={noImage} alt="" />
                           )}
                         <br />
-                        <a href={show.show.url}>{show.show.name}</a>
+                        <p>{show.show.name}</p>
                     </li>
                 ))}
             </ul>

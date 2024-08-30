@@ -4,7 +4,7 @@ import { Link, useMatch, useResolvedPath } from 'react-router-dom'
 const navbarStyles = css`
     display: flex;
     justify-content: center;
-    padding: 1em;
+    padding: 1rem;
     font-size: calc(5px + 2vmin);
     
     ul {
