@@ -1,6 +1,6 @@
 import { css } from '@emotion/react'
 import { useState, useEffect } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams, useNavigate } from 'react-router-dom'
 
 import logo from "../assets/television.svg"
 import noImage from "../assets/no-image.jpg"
@@ -116,6 +116,7 @@ function HomePage() {
     const [ shows, setShows ] = useState([])
     const [ loading, setLoading ] = useState(false)
     const [ error, setError ] = useState(null)
+    const navigate = useNavigate()
 
     useEffect(() => {
         const controller = new AbortController()    // used to cancel fetch request
@@ -169,7 +170,7 @@ function HomePage() {
                          (<img 
                             src={show.show.image.medium}
                             alt={`Poster for ${show.show.name}`}
-                            onClick={() => window.location.href = show.show.url} />) :
+                            onClick={() => navigate(`shows/${show.show.id}`)} />) :
                           (
                             <img className="noImage" src={noImage} alt="" />
                           )}
