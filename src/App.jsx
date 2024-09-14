@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage';
 import ReviewsPage from './pages/ReviewsPage';
 import FriendsPage from './pages/FriendsPage';
 import ShowPage from './pages/ShowPage';
+import ErrorPage from './pages/ErrorPage'
 
 const globalStyles = css`
   body {
@@ -27,6 +28,7 @@ function App() {
         <Route path="/reviews" element={<ReviewsPage />} />
         <Route path="/friends" element={<FriendsPage />} />
         <Route path='/shows/:id' element={<ShowPage />} />
+        <Route path='*' element={<ErrorPage />} />
       </Routes>
     </>
   )
