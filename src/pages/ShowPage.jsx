@@ -38,6 +38,7 @@ const showStyles = css`
         display: flex;
         gap: 4rem;
         align-items: center;
+        flex-direction: row;
     }
 `
 
@@ -162,7 +163,12 @@ function ShowPage() {
                                 <img src={showData.image.medium} alt={`Poster for ${showData.name}`} />
                             )}
                         </div>
+                        <div className='THIS IS WHERE U WANNA PUT THE RATING STARS'>
+                            <h1>Rate this show</h1>
+                            <p>lorem ipsum</p>
+                        </div>
                     </div>
+
                     <p className='description' dangerouslySetInnerHTML={{ __html: showData.summary }} />
                 </div>
             )}
