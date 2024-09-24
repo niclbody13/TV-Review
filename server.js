@@ -11,10 +11,11 @@ import { DynamoDBClient, ReturnValue } from '@aws-sdk/client-dynamodb'
 import { PutCommand, UpdateCommand, QueryCommand, DynamoDBDocumentClient, DeleteCommand } from '@aws-sdk/lib-dynamodb'
 import express from 'express'
 import dotenv from 'dotenv'
+import cors from 'cors'
 
 dotenv.config()
 const app = express()
-const PORT = 3030
+const PORT = process.env.VITE_PORT || 3030
 
 // Set up DynamoDB client
 const dynamoClient = new DynamoDBClient({
@@ -25,7 +26,9 @@ const dynamoClient = new DynamoDBClient({
   },
 })
 
-const docClient = DynamoDBDocumentClient.from(dynamoClient);
+const docClient = DynamoDBDocumentClient.from(dynamoClient)
+
+app.use(cors())
 
 app.use(express.json())  // To parse JSON bodies
 
@@ -33,13 +36,13 @@ app.use(express.json())  // To parse JSON bodies
 app.post('/rateShow', async (req, res) => {
   const { userId, showId, rating } = req.body
   if (!userId || !showId || rating === undefined) {
-    return res.status(400).send({
+    return res.status(400).json({
       error: 'Missing required parameters: userId, showId, and rating must be provided.'
-    });
+    })
   }
 
   if (rating < 0.5 || rating > 5) {
-    return res.status(400).json({ error: 'Rating must be between 0.5 and 5.' });
+    return res.status(400).json({ error: 'Rating must be between 0.5 and 5.' })
   }
 
   const params = {
@@ -54,23 +57,23 @@ app.post('/rateShow', async (req, res) => {
   try {
     const command = new PutCommand(params)
     await docClient.send(command)
-    res.status(200).send('Rating added!')
+    res.status(200).json({ message: 'Rating added!' })
   } catch (error) {
     console.error('Error adding rating:', error)
-    res.status(500).send('Error adding rating')
+    res.status(500).json({ error: 'Error adding rating' })
   }
 })
 
 app.patch('/updateRating', async (req, res) => {
   const { userId, showId, rating } = req.body
   if (!userId || !showId || rating === undefined) {
-    return res.status(400).send({
+    return res.status(400).json({
       error: 'Missing required parameters: userId, showId, and rating must be provided.'
-    });
+    })
   }
 
   if (rating < 0.5 || rating > 5) {
-    return res.status(400).json({ error: 'Rating must be between 0.5 and 5.' });
+    return res.status(400).json({ error: 'Rating must be between 0.5 and 5.' })
   }
 
   const params = {
@@ -88,14 +91,14 @@ app.patch('/updateRating', async (req, res) => {
 
   try {
     const command = new UpdateCommand(params)
-    const data = await docClient.send(command);
+    const data = await docClient.send(command)
     res.status(200).json({
       message: 'Rating updated!',
-      updatedRating: data.Attributes,  
+      updatedRating: data.Attributes,
     })
   } catch (error) {
     console.error('Error adding rating:', error)
-    res.status(500).send('Error adding rating')
+    res.status(500).json({ error: 'Error adding rating' })
   }
 })
 
@@ -106,17 +109,23 @@ app.delete('/deleteRating/:userId/:showId', async (req, res) => {
     Key: {
       userId: Number(userId),
       showId: Number(showId)
-    }
+    },
+    ReturnValues: 'ALL_OLD'
   }
 
   try {
     const command = new DeleteCommand(params)
-    await docClient.send(command)
-    res.status(200).send('Deleted rating')
+    const result = await docClient.send(command)
+
+    if (!result.Attributes) {
+      return res.status(404).json({ error: 'Rating not found' }) // If no attributes were returned, item didn't exist
+    }
+
+    res.status(200).json({ message: 'Deleted rating' })
 
   } catch (error) {
     console.log('Error deleting rating: ', error)
-    res.status(500).send('Error deleting rating')
+    res.status(500).json({ error: 'Error deleting rating' })
   }
 
 })
@@ -125,7 +134,7 @@ app.delete('/deleteRating/:userId/:showId', async (req, res) => {
 app.get('/ratings/:userId', async (req, res) => {
   const userId = Number(req.params.userId)
   if (isNaN(userId)) {
-    return res.status(400).send('Invalid userId');
+    return res.status(400).json({ error: 'Invalid userId' })
   }
   const params = {
     TableName: 'Ratings',
@@ -134,18 +143,17 @@ app.get('/ratings/:userId', async (req, res) => {
   }
 
   try {
-    console.log('params: ', params)
     const command = new QueryCommand(params)
     const data = await docClient.send(command)
     res.json(data.Items || [])
   } catch (error) {
     console.error('Error fetching ratings:', error)
-    res.status(500).send('Error fetching ratings')
+    res.status(500).json({ error: 'Error fetching ratings' })
   }
 })
 
-app.use('*', function (req, res, next) {
-  res.status(404).send({
+app.use('*', function (req, res) {
+  res.status(404).json({
     error: `Requested resource '${req.originalUrl}' does not exist`
   })
 })
