@@ -129,9 +129,11 @@ function HomePage() {
                     `https://api.tvmaze.com/search/shows?q=${query}`,
                     { signal: controller.signal }
                 )
+                if (!response.ok) {
+                    throw new Error('Failed to fetch data')
+                }
                 const responseBody = await response.json()
                 console.log(responseBody)
-                setLoading(false)
                 setError(null)
                 setShows(responseBody || [])
             } catch(e) {
@@ -141,6 +143,8 @@ function HomePage() {
                     console.error("An error has occured: ", e)
                     setError(e)
                 }
+            } finally {
+                setLoading(false)
             }
         }
         if(query) {
