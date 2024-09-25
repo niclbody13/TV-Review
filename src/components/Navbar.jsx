@@ -5,6 +5,7 @@ const navbarStyles = css`
     display: flex;
     justify-content: center;
     padding: 1rem;
+    margin-top: 1rem;
     font-size: calc(5px + 2vmin);
     
     ul {
