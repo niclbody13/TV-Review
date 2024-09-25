@@ -152,6 +152,32 @@ app.get('/ratings/:userId', async (req, res) => {
   }
 })
 
+// GET a user's rating for a specific show
+app.get('/ratings/:userId/:showId', async (req, res) => {
+  const userId = Number(req.params.userId)
+  const showId = Number(req.params.showId)
+  if (isNaN(userId) || isNaN(showId)) {
+    return res.status(400).json({ error: 'Invalid parameters' })
+  }
+  const params = {
+    TableName: 'Ratings',
+    KeyConditionExpression: 'userId = :userId AND showId = :showId',
+    ExpressionAttributeValues: {
+      ':userId': userId,
+      ':showId': showId
+    }
+  }
+
+  try {
+    const command = new QueryCommand(params)
+    const data = await docClient.send(command)
+    res.json(data.Items[0] || {})
+  } catch (e) {
+    console.error('Error fetching rating: ', e)
+    res.status(500).json({error: 'Error fetching rating'})
+  }
+})
+
 app.use('*', function (req, res) {
   res.status(404).json({
     error: `Requested resource '${req.originalUrl}' does not exist`
