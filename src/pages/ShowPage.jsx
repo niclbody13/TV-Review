@@ -234,71 +234,42 @@ function ShowPage() {
     }
 
     const toggleStar = (index, e) => {
-        // console.log("star clicked: ", index)
         if (index === 0 && rating === 1) {
             setRating(0)
             return
         }
-        // console.log("hoverRating: ", hoverRating)
-        // const finalRating = hoverRating > 0 ? hoverRating : rating
-        // setRating(index + 1)
 
-        // const clickPos = index * starWidth + starWidth / 2; // Calculate click position in the context of star width
-        
-        const starWidth = document.querySelector('.star').getBoundingClientRect().width; 
-        // const clickPos = (index * starWidth) + (starWidth / 2); // Position in the context of star width
+        const starWidth = document.querySelector('.star').getBoundingClientRect().width
         const clickPos = e.nativeEvent.offsetX
-        const finalRating = clickPos < starWidth / 2 ? index + 0.5 : index + 1; // Check for half-star condition
-        console.log("final ratinggg: ", finalRating)
+        const finalRating = clickPos < starWidth / 2 ? index + 0.5 : index + 1 // Check for half-star condition
 
-
-        console.log("clickPos: ", clickPos)
-        console.log('starwidth/2: ', starWidth / 2)
-    
-    // Check if the clicked position is in the left half of the star
-    if (hoverRating % 1 !== 0 && (hoverRating % 1) >= 0.5) {
-        // Clicked on a half star
-        setRating(Math.floor(hoverRating) + 0.5); // Set to half star
-    } else {
-        // Full star logic
-        // const finalRating = clickPos < starWidth / 2 ? index + 0.5 : index + 1; // Determine if half or full
-        console.log('finalrating: ', finalRating);
-        setRating(finalRating); // Update the rating state
-    }
-
-        // console.log('finalrating: ', finalRating)
-        // setRating(finalRating)
+        // Check if the clicked position is in the left half of the star
+        if (hoverRating % 1 !== 0 && (hoverRating % 1) >= 0.5) {
+            setRating(Math.floor(hoverRating) + 0.5)
+        } else {
+            // Full star logic
+            console.log('finalrating: ', finalRating)
+            setRating(finalRating)
+        }
     }
 
     const handleStarHover = (index, e) => {
-        // console.log("index: ", index)
-        // console.log("rating: ", rating)
-        // console.log("hoverRatiwng: ", hoverRating)
         if (index + 0.5 < rating) {
-            // console.log("less")
-            // setHoverRating(0)
             return
         }
-
         const star = e.currentTarget
         const starWidth = star.getBoundingClientRect().width
         const clickPos = e.nativeEvent.offsetX
-        // console.log("clickpos: ", clickPos)
-
         if (clickPos < starWidth / 2) {
-            // console.log("half")
             setHoverRating(index + 0.5)
         } else {
-            // console.log("full")
             setHoverRating(index + 1)
         }
-        // console.log("HoverRating: ", hoverRating)
     }
 
     const resetStarHover = () => {
         console.log("reset hover")
         setHoverRating(0)
-        // setRating(0)
     }
 
     return (
@@ -336,38 +307,14 @@ function ShowPage() {
                             }
                             <div className='starContainer' onMouseLeave={resetStarHover}>
                                 {[...Array(5)].map((_, index) => {
-                                    // const isFilled = index < Math.floor(rating)
-
-                                    // const isFilled = hoverRating > 0 && index < hoverRating && (hoverRating % 1 === 0)
-
-
-                                    // const isHalf = index === Math.floor(rating) && (rating % 1 !== 0)
-                                    // const isFilled = hoverRating > 0 ? index < hoverRating : index < rating
-                                    // const isFilled = hoverRating > 0 && index < rating
-                                    // const isHalf = hoverRating > 0 && index === Math.floor(hoverRating) && (hoverRating % 1 !== 0)
-
-
-                                    // const isHalf = hoverRating > 0 && index <= Math.floor(hoverRating) && (hoverRating % 1 !== 0)
-                                    // console.log("isHalf: ", isHalf)
-                                    
-                                    // const isFilled = hoverRating > 0 ? index < Math.floor(hoverRating) || (index === Math.floor(hoverRating) && (hoverRating % 1 === 0)) : index < Math.floor(rating);
-                                    // const isHalf = hoverRating > 0 && index === Math.floor(hoverRating) && (hoverRating % 1 !== 0);
-
-                                    const isFilled = hoverRating > 0 && index < Math.floor(hoverRating);
-                                    const isHalf = hoverRating > 0 && index === Math.floor(hoverRating) && (hoverRating % 1 !== 0);
-                                    const isFinalFilled = rating > 0 && index < Math.floor(rating);
-                                    const isFinalHalf = rating > 0 && index === Math.floor(rating) && (rating % 1 !== 0);
-                                    // console.log("isFilled: ", isFilled)
-                                    // console.log("isHalf: ", isHalf)
-                                    // console.log("isFinalFilled: ", isFinalFilled)
-                                    // console.log("isFinalHalf: ", isFinalHalf)
-                                    // console.log('hoverRating: ', hoverRating)
-                                    // console.log('rating: ', rating)
-                        
+                                    const isFilled = hoverRating > 0 && index < Math.floor(hoverRating)
+                                    const isHalf = hoverRating > 0 && index === Math.floor(hoverRating) && (hoverRating % 1 !== 0)
+                                    const isFinalFilled = rating > 0 && index < Math.floor(rating)
+                                    const isFinalHalf = rating > 0 && index === Math.floor(rating) && (rating % 1 !== 0)
                                     const icon = hoverRating > 0
                                         ? (isFilled ? filledStar : (isHalf ? halfStar : emptyStar))
-                                        : (isFinalFilled ? filledStar : (isFinalHalf ? halfStar : emptyStar));
-                        
+                                        : (isFinalFilled ? filledStar : (isFinalHalf ? halfStar : emptyStar))
+
                                     // console.log("isFilled: ", isFilled)
 
                                     return (
@@ -376,9 +323,6 @@ function ShowPage() {
                                             onClick={(e) => toggleStar(index, e)}
                                             onMouseMove={(e) => handleStarHover(index, e)}
                                             className='star'
-                                            // icon={index < rating ? filledStar : emptyStar}
-                                            // icon={isFilled ? filledStar : isHalf ? halfStar : emptyStar}
-                                            // icon={filled ? filledStar : isHalf ? halfStar : emptyStar}
                                             icon={icon}
                                             size='2xl'
                                         />
