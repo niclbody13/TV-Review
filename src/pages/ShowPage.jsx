@@ -4,19 +4,13 @@ import { useParams } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar as emptyStar } from '@fortawesome/free-regular-svg-icons'
 import { faStar as filledStar } from '@fortawesome/free-solid-svg-icons'
+import { faStarHalfStroke as halfStar } from '@fortawesome/free-regular-svg-icons'
 
 import noImage from "../assets/no-image.jpg"
 import ErrorContainer from '../components/ErrorContainer'
 import Spinner from '../components/Spinner'
 
 const PORT = import.meta.env.VITE_PORT
-/*
- * handle deleting by clearing the stars and fetching delete endpoint
- * handle submit logic with patch and post  
- * 
- * 
-
-*/
 
 const showStyles = css`
     display: flex;
@@ -95,6 +89,7 @@ function ShowPage() {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
     const [rating, setRating] = useState(0)
+    const [hoverRating, setHoverRating] = useState(0)
     const [isRated, setIsRated] = useState(false)
     let { id } = useParams()
 
@@ -238,17 +233,73 @@ function ShowPage() {
         }
     }
 
-    const toggleStar = (index) => {
-        console.log("star clicked: ", index)
-        console.log("Port: ", PORT)
+    const toggleStar = (index, e) => {
+        // console.log("star clicked: ", index)
         if (index === 0 && rating === 1) {
             setRating(0)
             return
         }
-        setRating(index + 1)
+        // console.log("hoverRating: ", hoverRating)
+        // const finalRating = hoverRating > 0 ? hoverRating : rating
+        // setRating(index + 1)
+
+        // const clickPos = index * starWidth + starWidth / 2; // Calculate click position in the context of star width
+        
+        const starWidth = document.querySelector('.star').getBoundingClientRect().width; 
+        // const clickPos = (index * starWidth) + (starWidth / 2); // Position in the context of star width
+        const clickPos = e.nativeEvent.offsetX
+        const finalRating = clickPos < starWidth / 2 ? index + 0.5 : index + 1; // Check for half-star condition
+        console.log("final ratinggg: ", finalRating)
+
+
+        console.log("clickPos: ", clickPos)
+        console.log('starwidth/2: ', starWidth / 2)
+    
+    // Check if the clicked position is in the left half of the star
+    if (hoverRating % 1 !== 0 && (hoverRating % 1) >= 0.5) {
+        // Clicked on a half star
+        setRating(Math.floor(hoverRating) + 0.5); // Set to half star
+    } else {
+        // Full star logic
+        // const finalRating = clickPos < starWidth / 2 ? index + 0.5 : index + 1; // Determine if half or full
+        console.log('finalrating: ', finalRating);
+        setRating(finalRating); // Update the rating state
     }
 
-    // post and patch will both come from submit button you can tell which it is by seeing if there was already an existing rating by checking if the stars are filled or not
+        // console.log('finalrating: ', finalRating)
+        // setRating(finalRating)
+    }
+
+    const handleStarHover = (index, e) => {
+        // console.log("index: ", index)
+        // console.log("rating: ", rating)
+        // console.log("hoverRatiwng: ", hoverRating)
+        if (index + 0.5 < rating) {
+            // console.log("less")
+            // setHoverRating(0)
+            return
+        }
+
+        const star = e.currentTarget
+        const starWidth = star.getBoundingClientRect().width
+        const clickPos = e.nativeEvent.offsetX
+        // console.log("clickpos: ", clickPos)
+
+        if (clickPos < starWidth / 2) {
+            // console.log("half")
+            setHoverRating(index + 0.5)
+        } else {
+            // console.log("full")
+            setHoverRating(index + 1)
+        }
+        // console.log("HoverRating: ", hoverRating)
+    }
+
+    const resetStarHover = () => {
+        console.log("reset hover")
+        setHoverRating(0)
+        // setRating(0)
+    }
 
     return (
         <div css={showStyles}>
@@ -283,16 +334,56 @@ function ShowPage() {
                                 <h1>You've rated this show</h1> :
                                 <h1>Rate this show</h1>
                             }
-                            <div className='starContainer'>
-                                {[...Array(5)].map((_, index) => (
-                                    <FontAwesomeIcon
-                                        key={index}
-                                        onClick={() => toggleStar(index)}
-                                        className='star'
-                                        icon={index < rating ? filledStar : emptyStar}
-                                        size='2xl'
-                                    />
-                                ))}
+                            <div className='starContainer' onMouseLeave={resetStarHover}>
+                                {[...Array(5)].map((_, index) => {
+                                    // const isFilled = index < Math.floor(rating)
+
+                                    // const isFilled = hoverRating > 0 && index < hoverRating && (hoverRating % 1 === 0)
+
+
+                                    // const isHalf = index === Math.floor(rating) && (rating % 1 !== 0)
+                                    // const isFilled = hoverRating > 0 ? index < hoverRating : index < rating
+                                    // const isFilled = hoverRating > 0 && index < rating
+                                    // const isHalf = hoverRating > 0 && index === Math.floor(hoverRating) && (hoverRating % 1 !== 0)
+
+
+                                    // const isHalf = hoverRating > 0 && index <= Math.floor(hoverRating) && (hoverRating % 1 !== 0)
+                                    // console.log("isHalf: ", isHalf)
+                                    
+                                    // const isFilled = hoverRating > 0 ? index < Math.floor(hoverRating) || (index === Math.floor(hoverRating) && (hoverRating % 1 === 0)) : index < Math.floor(rating);
+                                    // const isHalf = hoverRating > 0 && index === Math.floor(hoverRating) && (hoverRating % 1 !== 0);
+
+                                    const isFilled = hoverRating > 0 && index < Math.floor(hoverRating);
+                                    const isHalf = hoverRating > 0 && index === Math.floor(hoverRating) && (hoverRating % 1 !== 0);
+                                    const isFinalFilled = rating > 0 && index < Math.floor(rating);
+                                    const isFinalHalf = rating > 0 && index === Math.floor(rating) && (rating % 1 !== 0);
+                                    // console.log("isFilled: ", isFilled)
+                                    // console.log("isHalf: ", isHalf)
+                                    // console.log("isFinalFilled: ", isFinalFilled)
+                                    // console.log("isFinalHalf: ", isFinalHalf)
+                                    // console.log('hoverRating: ', hoverRating)
+                                    // console.log('rating: ', rating)
+                        
+                                    const icon = hoverRating > 0
+                                        ? (isFilled ? filledStar : (isHalf ? halfStar : emptyStar))
+                                        : (isFinalFilled ? filledStar : (isFinalHalf ? halfStar : emptyStar));
+                        
+                                    // console.log("isFilled: ", isFilled)
+
+                                    return (
+                                        <FontAwesomeIcon
+                                            key={index}
+                                            onClick={(e) => toggleStar(index, e)}
+                                            onMouseMove={(e) => handleStarHover(index, e)}
+                                            className='star'
+                                            // icon={index < rating ? filledStar : emptyStar}
+                                            // icon={isFilled ? filledStar : isHalf ? halfStar : emptyStar}
+                                            // icon={filled ? filledStar : isHalf ? halfStar : emptyStar}
+                                            icon={icon}
+                                            size='2xl'
+                                        />
+                                    )
+                                })}
                             </div>
                             <button onClick={() => rateShow(showData.id, rating)}>Submit Rating</button>
                             <button onClick={() => deleteRating(showData.id)}>Delete Rating</button>
