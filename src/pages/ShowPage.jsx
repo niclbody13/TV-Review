@@ -185,7 +185,7 @@ function ShowPage() {
 
     const seasons = seasonsData.filter(season => season.premiereDate)
 
-    async function rateShow(showId, rating) {
+    async function rateShow(showId, showName, showImage, rating) {
         const userId = 1    // set userId to 1 until login is implemented
         console.log("Rating: ", rating)
         try {
@@ -193,7 +193,7 @@ function ShowPage() {
             const response = await fetch(`http://localhost:${PORT}/${isRated ? 'updateRating' : 'rateShow'}`, {
                 method,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId: userId, showId, rating })
+                body: JSON.stringify({ userId: userId, showId, showName, showImage, rating })
             })
             if (!response.ok) {
                 const errorData = await response.json()
@@ -295,7 +295,7 @@ function ShowPage() {
                                 </ul> */}
                                 </div>
                             )}
-                            <p id='runtime'>({showData.premiered.split('-')[0]} - {showData.ended ? showData.ended.split('-')[0] : ''})</p>
+                            {showData.premiered ? (<p id='runtime'>({showData.premiered.split('-')[0]} - {showData.ended ? showData.ended.split('-')[0] : ''})</p>) : null}
                             {showData.image && (
                                 <img src={showData.image.medium} alt={`Poster for ${showData.name}`} />
                             )}
@@ -329,7 +329,8 @@ function ShowPage() {
                                     )
                                 })}
                             </div>
-                            <button onClick={() => rateShow(showData.id, rating)}>Submit Rating</button>
+                            <button onClick={() => rateShow(showData.id, showData.name, showData.image.medium, rating)}>Submit Rating</button>
+                            {/* <button onClick={() => rateShow(showData.id, rating)}>Submit Rating</button> */}
                             <button onClick={() => deleteRating(showData.id)}>Delete Rating</button>
                         </div>
                     </div>
