@@ -34,10 +34,10 @@ app.use(express.json())  // To parse JSON bodies
 
 // POST a rating
 app.post('/rateShow', async (req, res) => {
-  const { userId, showId, rating } = req.body
-  if (!userId || !showId || rating === undefined) {
+  const { userId, showId, showName, showImage, rating } = req.body
+  if (!userId || !showId || !showName || !showImage || rating === undefined) {
     return res.status(400).json({
-      error: 'Missing required parameters: userId, showId, and rating must be provided.'
+      error: 'Missing required parameters: userId, showId, showName, showImage, and rating must be provided.'
     })
   }
 
@@ -50,6 +50,8 @@ app.post('/rateShow', async (req, res) => {
     Item: {
       userId,
       showId,
+      showName,
+      showImage,
       rating,
     },
   }
@@ -68,7 +70,7 @@ app.patch('/updateRating', async (req, res) => {
   const { userId, showId, rating } = req.body
   if (!userId || !showId || rating === undefined) {
     return res.status(400).json({
-      error: 'Missing required parameters: userId, showId, and rating must be provided.'
+      error: 'Missing required parameters: userId, showId, showName, showImage, and rating must be provided.'
     })
   }
 
