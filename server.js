@@ -16,6 +16,7 @@ import cors from 'cors'
 dotenv.config()
 const app = express()
 const PORT = process.env.VITE_PORT || 3030
+const HOST = '0.0.0.0'
 
 // Set up DynamoDB client
 const dynamoClient = new DynamoDBClient({
@@ -186,6 +187,6 @@ app.use('*', function (req, res) {
   })
 })
 
-app.listen(PORT, () => {
-  console.log(`Server is listening on port ${PORT}`)
+app.listen(PORT, HOST, () => {
+  console.log(`Server is listening on http://${HOST}:${PORT}`)
 })
