@@ -11,6 +11,7 @@ import ErrorContainer from '../components/ErrorContainer'
 import Spinner from '../components/Spinner'
 
 const PORT = import.meta.env.VITE_PORT
+const HOST = import.meta.env.VITE_HOST || 'localhost'
 
 const showStyles = css`
     display: flex;
@@ -162,7 +163,7 @@ function ShowPage() {
         async function fetchUserRating() {
             const userId = 1    // set userId to 1 until login is implemented
             try {
-                const response = await fetch(`http://localhost:${PORT}/ratings/${userId}/${id}`)
+                const response = await fetch(`${HOST}:${PORT}/ratings/${userId}/${id}`)
                 if (!response.ok) {
                     const errorData = await response.json()
                     throw errorData
@@ -190,7 +191,7 @@ function ShowPage() {
         console.log("Rating: ", rating)
         try {
             const method = isRated ? 'PATCH' : 'POST'
-            const response = await fetch(`http://localhost:${PORT}/${isRated ? 'updateRating' : 'rateShow'}`, {
+            const response = await fetch(`${HOST}:${PORT}/${isRated ? 'updateRating' : 'rateShow'}`, {
                 method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ userId: userId, showId, showName, showImage, rating })
@@ -211,7 +212,7 @@ function ShowPage() {
     async function deleteRating(showId) {
         const userId = 1    // set userId to 1 until login is implemented
         try {
-            const response = await fetch(`http://localhost:${PORT}/deleteRating/${userId}/${showId}`, {
+            const response = await fetch(`${HOST}:${PORT}/deleteRating/${userId}/${showId}`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
             })

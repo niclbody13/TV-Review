@@ -11,6 +11,7 @@ import Spinner from '../components/Spinner'
 import noImage from "../assets/no-image.jpg"
 
 const PORT = import.meta.env.VITE_PORT
+const HOST = import.meta.env.VITE_HOST || 'localhost'
 const userId = 1    // set to 1 until login is implemented
 
 const reviewsPageStyles = css`
@@ -64,7 +65,7 @@ function ReviewsPage() {
         async function getReviews() {
             setLoading(true)
             try {
-                const response = await fetch(`http://localhost:${PORT}/ratings/${userId}`)
+                const response = await fetch(`${HOST}:${PORT}/ratings/${userId}`)
                 if (!response.ok) {
                     const errorData = await response.json()
                     throw errorData
