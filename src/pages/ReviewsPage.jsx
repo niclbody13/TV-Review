@@ -111,7 +111,7 @@ function ReviewsPage() {
                                     let icon
                                     if (review.rating >= index + 1) {
                                         icon = filledStar
-                                    } else if (review.rating > index && rating < index + 1) {
+                                    } else if (review.rating > index && review.rating < index + 1) {
                                         icon = halfStar
                                     } else {
                                         icon = emptyStar
