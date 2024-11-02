@@ -10,7 +10,7 @@ import ErrorContainer from '../components/ErrorContainer'
 import Spinner from '../components/Spinner'
 import noImage from "../assets/no-image.jpg"
 
-const PORT = import.meta.env.VITE_PORT
+const PORT = import.meta.env.VITE_PORT || 3030
 const HOST = import.meta.env.VITE_HOST || 'localhost'
 const userId = 1    // set to 1 until login is implemented
 
@@ -65,7 +65,7 @@ function ReviewsPage() {
         async function getReviews() {
             setLoading(true)
             try {
-                const response = await fetch(`${HOST}:${PORT}/ratings/${userId}`)
+                const response = await fetch(`http://${HOST}:${PORT}/ratings/${userId}`)
                 if (!response.ok) {
                     const errorData = await response.json()
                     throw errorData
