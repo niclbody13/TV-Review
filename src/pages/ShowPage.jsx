@@ -47,6 +47,34 @@ const showStyles = css`
         align-items: center;
         flex-direction: row;
     }
+
+    @media(max-width: 760px) {
+        .showWrapper {
+            margin: 0 1rem;
+        }
+        
+        .showWrapper h1 {
+            font-size: 1.25rem;
+            margin: 0.25rem 0;
+        }
+
+        .mainInfo {
+            gap: 1rem;
+        }
+
+        .mainInfo p {
+            font-size: 1rem;
+            margin: 0.25rem;
+        }
+
+        #runtime {
+            font-size: 1rem;
+        }
+        
+        .description {
+            font-size: 1rem;
+        }
+    }
 `
 
 const seasonsStyles = css`
@@ -81,6 +109,20 @@ const ratingStyles = css`
     button {
         margin: 1rem 0;
         margin-right: 1rem;
+    }
+
+    @media(max-width: 760px) {
+        .star {
+            font-size: 1.25rem;
+        }
+
+        .starContainer {
+            margin: 0.5rem;
+        }
+
+        button {
+            margin: 0.75rem;
+        }
     }
 `
 

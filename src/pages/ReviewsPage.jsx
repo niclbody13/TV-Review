@@ -30,6 +30,7 @@ const reviewsPageStyles = css`
         display: flex;
         flex-direction: column;
         gap: 0.25rem;
+        align-items: center;
     }
 
     li p {
@@ -53,6 +54,17 @@ const reviewsPageStyles = css`
 
     .star {
         font-size: 1rem;
+    }
+
+    @media(max-width: 760px) {
+        ul {
+            margin: 1rem;
+            grid-template-columns: repeat(auto-fill, minmax(125px, 1fr));
+        }
+
+        li img {
+            width: 8rem;
+        }
     }
 `
 
