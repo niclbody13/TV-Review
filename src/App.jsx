@@ -111,7 +111,7 @@ function App() {
   }, [isAuthenticated]);
   return (
     <>
-      <Authenticator signUpAttributes={['preferred_username']} formFields={formFields} services={services}>
+      <Authenticator css={authenticatorStyles} signUpAttributes={['preferred_username']} formFields={formFields} services={services}>
         {({ signOut, user }) => {
           if (user && !isAuthenticated) {
             setIsAuthenticated(true);
