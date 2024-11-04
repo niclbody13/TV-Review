@@ -9,11 +9,11 @@ import { signUp, fetchUserAttributes } from 'aws-amplify/auth';
 
 Amplify.configure(outputs);
 
-import Navbar from './components/Navbar';
-import HomePage from './pages/HomePage';
-import ReviewsPage from './pages/ReviewsPage';
-import FriendsPage from './pages/FriendsPage';
-import ShowPage from './pages/ShowPage';
+import Navbar from './components/Navbar'
+import HomePage from './pages/HomePage'
+import ReviewsPage from './pages/ReviewsPage'
+import FriendsPage from './pages/FriendsPage'
+import ShowPage from './pages/ShowPage'
 import ErrorPage from './pages/ErrorPage'
 
 const globalStyles = css`
@@ -25,6 +25,34 @@ const globalStyles = css`
     color: white;
   }
 `;
+
+const authenticatorStyles = css`
+  .amplify-button--primary {
+    --amplify-internal-button-background-color: #d73f09; 
+  }
+
+  .amplify-button:hover {
+    --amplify-internal-button-border-color: #777;
+    --amplify-internal-button-color: #333;
+    --amplify-internal-button-background-color: rgba(215, 63, 9, 0.25);
+
+  }
+
+  .amplify-tabs__item:hover {
+    color: rgba(215, 63, 9, 0.75);
+  }
+
+  .amplify-tabs__item--active {
+    color: #d73f09;
+    border-color: #d73f09;
+  }
+  .amplify-button--link {
+    --amplify-internal-button-color: #d73f09;
+  }
+  .amplify-button--link:hover {
+    --amplify-internal-button-background-color: rgba(1, 1, 1, 0.25);
+  }
+`
 
 const formFields = {
   signUp: {
