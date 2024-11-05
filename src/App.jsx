@@ -5,7 +5,7 @@ import { Authenticator } from '@aws-amplify/ui-react';
 import { Amplify } from 'aws-amplify';
 import '@aws-amplify/ui-react/styles.css';
 import outputs from "../amplify_outputs.json";
-import { signUp, fetchUserAttributes } from 'aws-amplify/auth';
+import { signUp } from 'aws-amplify/auth';
 
 Amplify.configure(outputs);
 
@@ -14,6 +14,7 @@ import HomePage from './pages/HomePage'
 import ReviewsPage from './pages/ReviewsPage'
 import FriendsPage from './pages/FriendsPage'
 import ShowPage from './pages/ShowPage'
+import AccountPage from './pages/AccountPage'
 import ErrorPage from './pages/ErrorPage'
 
 const globalStyles = css`
@@ -92,52 +93,24 @@ const services = {
 }
 
 function App() {
-  const [userAttributes, setUserAttributes] = useState(null)
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    const getUserData = async () => {
-      try {
-        if (isAuthenticated) {
-          const attributes = await fetchUserAttributes();
-          console.log("userAttributes:", attributes);
-          setUserAttributes(attributes);
-        }
-      } catch (error) {
-        console.error("Error fetching user attributes:", error);
-      }
-    };
-    getUserData();
-  }, [isAuthenticated]);
   return (
     <>
       <Authenticator css={authenticatorStyles} signUpAttributes={['preferred_username']} formFields={formFields} services={services}>
-        {({ signOut, user }) => {
-          if (user && !isAuthenticated) {
-            setIsAuthenticated(true);
-          }
-
-          return (
-            <main>
-              {userAttributes ? (
-                <h1>Hello, {userAttributes.preferred_username}</h1>
-              ) : (
-                <h1>Loading user data...</h1>
-              )}
-              <button onClick={signOut}>Sign out</button>
-            </main>
-          );
-        }}
+        {() => (
+          <>
+            <Global styles={globalStyles} />
+            <Navbar />
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/reviews" element={<ReviewsPage />} />
+              <Route path="/friends" element={<FriendsPage />} />
+              <Route path='/shows/:id' element={<ShowPage />} />
+              <Route path='account' element={<AccountPage />} />
+              <Route path='*' element={<ErrorPage />} />
+            </Routes>
+          </>
+        )}
       </Authenticator>
-      {/* <Global styles={globalStyles} />
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/reviews" element={<ReviewsPage />} />
-        <Route path="/friends" element={<FriendsPage />} />
-        <Route path='/shows/:id' element={<ShowPage />} />
-        <Route path='*' element={<ErrorPage />} />
-      </Routes> */}
     </>
   )
 }
