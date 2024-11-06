@@ -18,7 +18,6 @@ function AccountPage() {
         const getUserData = async () => {
             try {
                 const attributes = await fetchUserAttributes();
-                console.log("userAttributes:", attributes);
                 setUserAttributes(attributes)
             } catch (error) {
                 console.error("Error fetching user attributes:", error);
