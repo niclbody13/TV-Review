@@ -5,10 +5,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar as emptyStar } from '@fortawesome/free-regular-svg-icons'
 import { faStar as filledStar } from '@fortawesome/free-solid-svg-icons'
 import { faStarHalfStroke as halfStar } from '@fortawesome/free-regular-svg-icons'
+import { Amplify } from 'aws-amplify'
+import outputs from '../../amplify_outputs.json'
+import { fetchUserAttributes } from 'aws-amplify/auth'
 
 import noImage from "../assets/no-image.jpg"
 import ErrorContainer from '../components/ErrorContainer'
 import Spinner from '../components/Spinner'
+
+Amplify.configure(outputs)
 
 const PORT = import.meta.env.VITE_PORT
 const HOST = import.meta.env.VITE_HOST || 'localhost'
@@ -128,6 +133,7 @@ const ratingStyles = css`
 
 function ShowPage() {
     const [showData, setShowData] = useState(null)
+    const [ isShowDataReady, setIsShowDataReady ] = useState(false)
     const [seasonsData, setSeasonsData] = useState([])
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
@@ -135,6 +141,21 @@ function ShowPage() {
     const [hoverRating, setHoverRating] = useState(0)
     const [isRated, setIsRated] = useState(false)
     let { id } = useParams()
+    const [userId, setUserId] = useState(null)
+    const [ isUserIdReady, setIsUserIdReady ] = useState(false)
+
+    useEffect(() => {
+        const getUserId = async () => {
+            try {
+                const attributes = await fetchUserAttributes();
+                setUserId(attributes.sub)
+                setIsUserIdReady(true)
+            } catch (error) {
+                console.error("Error fetching user attributes:", error);
+            }
+        };
+        getUserId();
+    }, []);
 
     useEffect(() => {
         const controller = new AbortController()    // used to cancel fetch request
@@ -154,6 +175,7 @@ function ShowPage() {
                 console.log(responseBody)
                 setError(null)
                 setShowData(responseBody)
+                setIsShowDataReady(true)
             } catch (e) {
                 if (e.name === "AbortError") {
                     console.log("HTTP request was aborted")
@@ -172,7 +194,7 @@ function ShowPage() {
     }, [id])
 
     useEffect(() => {
-        if (!showData) return
+        if (!isShowDataReady) return
         const controller = new AbortController()
         async function fetchSeasons() {
             setLoading(true)
@@ -199,11 +221,12 @@ function ShowPage() {
         fetchSeasons()
 
         return () => controller.abort()
-    }, [showData, id])
+    }, [isShowDataReady, id])
 
     useEffect(() => {
+        if(!isUserIdReady || !isShowDataReady) return
         async function fetchUserRating() {
-            const userId = 1    // set userId to 1 until login is implemented
+            // const userId = 1    // set userId to 1 until login is implemented
             try {
                 const response = await fetch(`http://${HOST}:${PORT}/ratings/${userId}/${id}`)
                 if (!response.ok) {
@@ -219,7 +242,7 @@ function ShowPage() {
         }
 
         fetchUserRating()
-    }, [id])    //may need to add userId here once there are multiple users
+    }, [userId, isUserIdReady, isShowDataReady, id])    //may need to add userId here once there are multiple users
 
     function formatDate(date) {
         const [year, month, day] = date.split('-')
@@ -229,7 +252,7 @@ function ShowPage() {
     const seasons = seasonsData.filter(season => season.premiereDate)
 
     async function rateShow(showId, showName, showImage, rating) {
-        const userId = 1    // set userId to 1 until login is implemented
+        // const userId = 1    // set userId to 1 until login is implemented
         console.log("Rating: ", rating)
         try {
             const method = isRated ? 'PATCH' : 'POST'
@@ -252,7 +275,7 @@ function ShowPage() {
     }
 
     async function deleteRating(showId) {
-        const userId = 1    // set userId to 1 until login is implemented
+        // const userId = 1    // set userId to 1 until login is implemented
         try {
             const response = await fetch(`http://${HOST}:${PORT}/deleteRating/${userId}/${showId}`, {
                 method: 'DELETE',

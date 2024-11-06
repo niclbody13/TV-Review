@@ -5,14 +5,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar as emptyStar } from '@fortawesome/free-regular-svg-icons'
 import { faStar as filledStar } from '@fortawesome/free-solid-svg-icons'
 import { faStarHalfStroke as halfStar } from '@fortawesome/free-regular-svg-icons'
+import { Amplify } from 'aws-amplify'
+import outputs from '../../amplify_outputs.json'
+import { fetchUserAttributes } from 'aws-amplify/auth'
 
 import ErrorContainer from '../components/ErrorContainer'
 import Spinner from '../components/Spinner'
 import noImage from "../assets/no-image.jpg"
 
+Amplify.configure(outputs)
+
 const PORT = import.meta.env.VITE_PORT || 3030
 const HOST = import.meta.env.VITE_HOST || 'localhost'
-const userId = 1    // set to 1 until login is implemented
+// const userId = 1    // set to 1 until login is implemented
 
 const reviewsPageStyles = css`
     text-align: center;
@@ -73,7 +78,25 @@ function ReviewsPage() {
     const [error, setError] = useState(null)
     const [reviews, setReviews] = useState([])
     const navigate = useNavigate()
+    const [ userId, setUserId ] = useState(null)
+    const [ isUserIdReady, setIsUserIdReady ] = useState(false)
+
     useEffect(() => {
+        const getUserId = async () => {
+            try {
+                const attributes = await fetchUserAttributes();
+                setUserId(attributes.sub)
+                setIsUserIdReady(true)
+            } catch (error) {
+                console.error("Error fetching user attributes:", error);
+            }
+        };
+        getUserId();
+    }, []);
+
+    useEffect(() => {
+        if(!isUserIdReady) return
+        
         async function getReviews() {
             setLoading(true)
             try {
@@ -94,7 +117,7 @@ function ReviewsPage() {
         }
 
         getReviews()
-    }, [])
+    }, [userId, isUserIdReady])
 
     return (
         <div css={reviewsPageStyles}>
