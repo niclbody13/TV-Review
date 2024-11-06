@@ -47,7 +47,7 @@ app.post('/rateShow', async (req, res) => {
   }
 
   const params = {
-    TableName: 'Ratings',
+    TableName: 'userRatings',
     Item: {
       userId,
       showId,
@@ -80,7 +80,7 @@ app.patch('/updateRating', async (req, res) => {
   }
 
   const params = {
-    TableName: 'Ratings',
+    TableName: 'userRatings',
     Key: {
       userId,
       showId,
@@ -108,9 +108,9 @@ app.patch('/updateRating', async (req, res) => {
 app.delete('/deleteRating/:userId/:showId', async (req, res) => {
   const { userId, showId } = req.params
   const params = {
-    TableName: 'Ratings',
+    TableName: 'userRatings',
     Key: {
-      userId: Number(userId),
+      userId: userId,
       showId: Number(showId)
     },
     ReturnValues: 'ALL_OLD'
@@ -135,12 +135,12 @@ app.delete('/deleteRating/:userId/:showId', async (req, res) => {
 
 // GET a specific user's ratings
 app.get('/ratings/:userId', async (req, res) => {
-  const userId = Number(req.params.userId)
-  if (isNaN(userId)) {
+  const userId = req.params.userId
+  if (!userId) {
     return res.status(400).json({ error: 'Invalid userId' })
   }
   const params = {
-    TableName: 'Ratings',
+    TableName: 'userRatings',
     KeyConditionExpression: 'userId = :userId',
     ExpressionAttributeValues: { ':userId': userId },
   }
@@ -157,13 +157,13 @@ app.get('/ratings/:userId', async (req, res) => {
 
 // GET a user's rating for a specific show
 app.get('/ratings/:userId/:showId', async (req, res) => {
-  const userId = Number(req.params.userId)
+  const userId = req.params.userId
   const showId = Number(req.params.showId)
-  if (isNaN(userId) || isNaN(showId)) {
+  if (!userId || isNaN(showId)) {
     return res.status(400).json({ error: 'Invalid parameters' })
   }
   const params = {
-    TableName: 'Ratings',
+    TableName: 'userRatings',
     KeyConditionExpression: 'userId = :userId AND showId = :showId',
     ExpressionAttributeValues: {
       ':userId': userId,
