@@ -19,6 +19,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.6.0",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "aws-amplify": "^6.8.0",
     "aws-sdk": "^2.1691.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -28,14 +29,22 @@
     "react-router-dom": "^6.25.1"
   },
   "devDependencies": {
+    "@aws-amplify/backend": "^1.6.2",
+    "@aws-amplify/backend-cli": "^1.4.1",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
+    "aws-cdk": "^2.166.0",
+    "aws-cdk-lib": "^2.166.0",
+    "constructs": "^10.4.2",
+    "esbuild": "^0.24.0",
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.34.3",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
     "react-error-overlay": "^6.0.9",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3",
     "vite": "^5.3.4"
   }
 }
