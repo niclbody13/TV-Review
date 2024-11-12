@@ -107,7 +107,7 @@ function ReviewsPage() {
                 }
                 const reviewsData = await response.json()
                 setError(null)
-                setReviews(reviewsData || [])
+                setReviews(reviewsData.body || [])
             } catch (e) {
                 console.error('Failed to fetch reviews: ', e)
                 setError(e.message || 'Failed to fetch reviews')
