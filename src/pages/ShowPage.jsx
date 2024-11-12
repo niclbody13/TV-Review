@@ -133,7 +133,7 @@ const ratingStyles = css`
 
 function ShowPage() {
     const [showData, setShowData] = useState(null)
-    const [ isShowDataReady, setIsShowDataReady ] = useState(false)
+    const [isShowDataReady, setIsShowDataReady] = useState(false)
     const [seasonsData, setSeasonsData] = useState([])
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
@@ -142,7 +142,7 @@ function ShowPage() {
     const [isRated, setIsRated] = useState(false)
     let { id } = useParams()
     const [userId, setUserId] = useState(null)
-    const [ isUserIdReady, setIsUserIdReady ] = useState(false)
+    const [isUserIdReady, setIsUserIdReady] = useState(false)
 
     useEffect(() => {
         const getUserId = async () => {
@@ -224,11 +224,11 @@ function ShowPage() {
     }, [isShowDataReady, id])
 
     useEffect(() => {
-        if(!isUserIdReady || !isShowDataReady) return
+        if (!isUserIdReady || !isShowDataReady) return
         async function fetchUserRating() {
             // const userId = 1    // set userId to 1 until login is implemented
             try {
-                const response = await fetch(`http://${HOST}:${PORT}/ratings/${userId}/${id}`)
+                const response = await fetch(`${import.meta.env.VITE_AWS_GATEWAY_URL}/ratings/${userId}/${id}`)
                 if (!response.ok) {
                     const errorData = await response.json()
                     throw errorData
@@ -255,10 +255,10 @@ function ShowPage() {
         // const userId = 1    // set userId to 1 until login is implemented
         console.log("Rating: ", rating)
         try {
-            const method = isRated ? 'PATCH' : 'POST'
-            const response = await fetch(`http://${HOST}:${PORT}/${isRated ? 'updateRating' : 'rateShow'}`, {
+            const method = 'POST'
+            // const response = await fetch(`https://7bhwd5wpo4.execute-api.us-west-1.amazonaws.com/${isRated ? 'updateRating' : 'rateShow'}`, {
+            const response = await fetch(`${import.meta.env.VITE_AWS_GATEWAY_URL}/ratings`, {
                 method,
-                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ userId: userId, showId, showName, showImage, rating })
             })
             if (!response.ok) {
