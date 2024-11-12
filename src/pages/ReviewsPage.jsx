@@ -100,7 +100,7 @@ function ReviewsPage() {
         async function getReviews() {
             setLoading(true)
             try {
-                const response = await fetch(`http://${HOST}:${PORT}/ratings/${userId}`)
+                const response = await fetch(`${import.meta.env.VITE_AWS_GATEWAY_URL}/ratings/${userId}`)
                 if (!response.ok) {
                     const errorData = await response.json()
                     throw errorData

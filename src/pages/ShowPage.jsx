@@ -256,7 +256,6 @@ function ShowPage() {
         console.log("Rating: ", rating)
         try {
             const method = 'POST'
-            // const response = await fetch(`https://7bhwd5wpo4.execute-api.us-west-1.amazonaws.com/${isRated ? 'updateRating' : 'rateShow'}`, {
             const response = await fetch(`${import.meta.env.VITE_AWS_GATEWAY_URL}/ratings`, {
                 method,
                 body: JSON.stringify({ userId: userId, showId, showName, showImage, rating })
@@ -277,7 +276,7 @@ function ShowPage() {
     async function deleteRating(showId) {
         // const userId = 1    // set userId to 1 until login is implemented
         try {
-            const response = await fetch(`http://${HOST}:${PORT}/deleteRating/${userId}/${showId}`, {
+            const response = await fetch(`${import.meta.env.VITE_AWS_GATEWAY_URL}/ratings/${userId}/${showId}`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
             })
