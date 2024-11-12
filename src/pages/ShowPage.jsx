@@ -255,7 +255,7 @@ function ShowPage() {
         // const userId = 1    // set userId to 1 until login is implemented
         console.log("Rating: ", rating)
         try {
-            const method = 'POST'
+              const method = isRated ? 'PATCH' : 'POST'
             const response = await fetch(`${import.meta.env.VITE_AWS_GATEWAY_URL}/ratings`, {
                 method,
                 body: JSON.stringify({ userId: userId, showId, showName, showImage, rating })
