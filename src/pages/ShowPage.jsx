@@ -234,8 +234,8 @@ function ShowPage() {
                     throw errorData
                 }
                 const ratingData = await response.json()
-                setRating(ratingData.rating || 0)
-                setIsRated(!!ratingData.rating)
+                setRating(ratingData.body.rating || 0)
+                setIsRated(!!ratingData.body.rating)
             } catch (e) {
                 console.error('Failed to fetch rating: ', e)
             }
