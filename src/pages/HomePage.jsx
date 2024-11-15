@@ -176,7 +176,12 @@ function HomePage() {
                             alt={`Poster for ${show.show.name}`}
                             onClick={() => navigate(`shows/${show.show.id}`)} />) :
                           (
-                            <img className="noImage" src={noImage} alt="" />
+                            <img 
+                                className="noImage"
+                                src={noImage} 
+                                alt="No image available"
+                                onClick={() => navigate(`shows/${show.show.id}`)}
+                            />
                           )}
                         <br />
                         <p>{show.show.name}</p>

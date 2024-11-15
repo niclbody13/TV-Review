@@ -5,11 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "server": "node server.js",
+    "client": "vite --host",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@aws-amplify/ui-react": "^6.5.5",
     "@aws-sdk/client-dynamodb": "^3.656.0",
     "@aws-sdk/lib-dynamodb": "^3.656.0",
     "@emotion/babel-plugin": "^11.12.0",
@@ -26,16 +29,19 @@
     "express": "^4.21.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.25.1"
+    "react-router-dom": "^6.25.1",
+    "serverless-http": "^3.2.0"
   },
   "devDependencies": {
     "@aws-amplify/backend": "^1.6.2",
     "@aws-amplify/backend-cli": "^1.4.1",
+    "@types/node": "^22.8.6",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
     "aws-cdk": "^2.166.0",
     "aws-cdk-lib": "^2.166.0",
+    "concurrently": "^9.1.0",
     "constructs": "^10.4.2",
     "esbuild": "^0.24.0",
     "eslint": "^8.57.0",
@@ -45,6 +51,6 @@
     "react-error-overlay": "^6.0.9",
     "tsx": "^4.19.2",
     "typescript": "^5.6.3",
-    "vite": "^5.3.4"
+    "vite": "^5.4.10"
   }
 }

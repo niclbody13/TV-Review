@@ -1,11 +1,11 @@
 import { Global, css } from '@emotion/react';
 import { Routes, Route } from 'react-router-dom';
-
-import Navbar from './components/Navbar';
-import HomePage from './pages/HomePage';
-import ReviewsPage from './pages/ReviewsPage';
-import FriendsPage from './pages/FriendsPage';
-import ShowPage from './pages/ShowPage';
+import Navbar from './components/Navbar'
+import HomePage from './pages/HomePage'
+import ReviewsPage from './pages/ReviewsPage'
+import FriendsPage from './pages/FriendsPage'
+import ShowPage from './pages/ShowPage'
+import AccountPage from './pages/AccountPage'
 import ErrorPage from './pages/ErrorPage'
 
 const globalStyles = css`
@@ -28,6 +28,7 @@ function App() {
         <Route path="/reviews" element={<ReviewsPage />} />
         <Route path="/friends" element={<FriendsPage />} />
         <Route path='/shows/:id' element={<ShowPage />} />
+        <Route path='account' element={<AccountPage />} />
         <Route path='*' element={<ErrorPage />} />
       </Routes>
     </>

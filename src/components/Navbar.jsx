@@ -42,6 +42,7 @@ function Navbar() {
                 <ActiveLink to="/">Home</ActiveLink>
                 <ActiveLink to="/reviews">My Reviews</ActiveLink>
                 <ActiveLink to="/friends">Friends</ActiveLink>
+                <ActiveLink to="/account">Account</ActiveLink>
             </ul>
         </nav>
     )
@@ -49,7 +50,7 @@ function Navbar() {
 
 function ActiveLink({ to, children, ...props }) {
     const resolvedPath = useResolvedPath(to)
-    const isActive = useMatch({ path: resolvedPath.pathname, end:true })
+    const isActive = useMatch({ path: resolvedPath.pathname, end: true })
     return (
         <li>
             <Link to={to} className={isActive ? "active" : ""} {...props}>
