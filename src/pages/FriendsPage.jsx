@@ -7,7 +7,7 @@ const friendsPageStyles = css`
 function FriendsPage() {
     return (
         <div css={friendsPageStyles}>
-            <h1>Friends</h1>
+            <h1>Coming Soon!</h1>
         </div>
     )
 }
