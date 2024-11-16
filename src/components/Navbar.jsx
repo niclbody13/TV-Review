@@ -6,7 +6,7 @@ const navbarStyles = css`
     justify-content: center;
     padding: 1rem;
     margin-top: 1rem;
-    font-size: calc(5px + 2vmin);
+    font-size: calc(5.5px + 2vmin);
     
     ul {
         list-style: none;
