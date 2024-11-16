@@ -15,10 +15,6 @@ import noImage from "../assets/no-image.jpg"
 
 Amplify.configure(outputs)
 
-const PORT = import.meta.env.VITE_PORT || 3030
-const HOST = import.meta.env.VITE_HOST || 'localhost'
-// const userId = 1    // set to 1 until login is implemented
-
 const reviewsPageStyles = css`
     text-align: center;
 
@@ -69,6 +65,12 @@ const reviewsPageStyles = css`
 
         li img {
             width: 8rem;
+        }
+    }
+    
+    @media(max-width: 480px) {
+        ul {
+            /* grid-template-columns: repeat(2, minmax(0, 1fr)); */
         }
     }
 `
@@ -140,7 +142,6 @@ function ReviewsPage() {
                                         onClick={() => navigate(`/shows/${review.showId}`)}
                                     />
                                 )}
-                            <br />
                             <p>{review.showName}</p>
                             <div className='starContainer'>
                                 {[...Array(5)].map((_, index) => {
