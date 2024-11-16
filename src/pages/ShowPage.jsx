@@ -15,9 +15,6 @@ import Spinner from '../components/Spinner'
 
 Amplify.configure(outputs)
 
-const PORT = import.meta.env.VITE_PORT
-const HOST = import.meta.env.VITE_HOST || 'localhost'
-
 const showStyles = css`
     display: flex;
     flex-direction: column;
@@ -39,7 +36,7 @@ const showStyles = css`
 
     #runtime {
         font-size: 1.15rem;
-        margin-top: 0;
+        /* margin-top: 0; */
     }
 
     img {
@@ -80,9 +77,20 @@ const showStyles = css`
             font-size: 1rem;
         }
     }
+
+    @media(max-width: 480px) {
+        .showWrapper h1 {
+            /* font-size: 1rem; */
+        }  
+    }
 `
 
 const seasonsStyles = css`
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: start;
+    align-items: center;
+
     ul {
         display: flex;
         gap: 1rem;
@@ -127,6 +135,21 @@ const ratingStyles = css`
 
         button {
             margin: 0.75rem;
+        }
+
+        @media (max-width: 480px) {
+            button {
+                width: 8rem;
+                font-size: 0.9rem;
+                color: white;
+                background-color: #333;
+                border-radius: 15px;
+                border: 1px solid black;
+            }
+            
+            h1 {
+                font-size: 1rem !important;
+            }
         }
     }
 `
@@ -255,7 +278,7 @@ function ShowPage() {
         // const userId = 1    // set userId to 1 until login is implemented
         console.log("Rating: ", rating)
         try {
-              const method = isRated ? 'PATCH' : 'POST'
+            const method = isRated ? 'PATCH' : 'POST'
             const response = await fetch(`${import.meta.env.VITE_AWS_GATEWAY_URL}/ratings`, {
                 method,
                 body: JSON.stringify({ userId: userId, showId, showName, showImage, rating })
@@ -358,9 +381,9 @@ function ShowPage() {
                                         </li>
                                     ))}
                                 </ul> */}
+                                    {showData.premiered ? (<p id='runtime'>({showData.premiered.split('-')[0]} - {showData.ended ? showData.ended.split('-')[0] : ''})</p>) : null}
                                 </div>
                             )}
-                            {showData.premiered ? (<p id='runtime'>({showData.premiered.split('-')[0]} - {showData.ended ? showData.ended.split('-')[0] : ''})</p>) : null}
                             {showData.image && (
                                 <img src={showData.image.medium} alt={`Poster for ${showData.name}`} />
                             )}

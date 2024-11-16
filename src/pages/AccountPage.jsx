@@ -9,6 +9,15 @@ Amplify.configure(outputs)
 
 const accountStyles = css`
     text-align: center;    
+
+    button {
+        width: 8rem;
+        font-size: 0.9rem;
+        color: white;
+        background-color: #333;
+        border-radius: 15px;
+        border: 1px solid black;
+    }
 `
 
 function AccountPage() {

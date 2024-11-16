@@ -1,8 +1,9 @@
 import { css } from '@emotion/react'
 import { useState, useEffect } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 
-import logo from "../assets/television.svg"
 import noImage from "../assets/no-image.jpg"
 import ErrorContainer from '../components/ErrorContainer'
 import Spinner from '../components/Spinner'
@@ -12,39 +13,13 @@ const homePageStyles = css`
         text-align: center;
     }
 
-    .App-logo {
-        height: 40vmin;
-        pointer-events: none;
+    .searchBar {
+        /* display: flex; */
+        /* justify-content: center; */
     }
 
-    @media (prefers-reduced-motion: no-preference) {
-        .App-logo {
-        animation: App-logo-spin infinite 10s linear;
-        }
-    }
-
-    .App-header {
-        background-color: #282c34;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        font-size: calc(10px + 2vmin);
-        color: white;
-    }
-
-    .App-link {
-        color: #61dafb;
-    }
-
-    @keyframes App-logo-spin {
-        from {
-        transform: rotateY(0deg);
-        }
-        to {
-        transform: rotateY(360deg);
-        }
+    .searchIcon {
+        color: black;
     }
 
     form {
@@ -52,6 +27,7 @@ const homePageStyles = css`
         justify-content: center;
         gap: 1em;
         margin: 2rem;
+        /* background-color: #fff; */
     }
 
     input {
@@ -61,6 +37,10 @@ const homePageStyles = css`
         height: 2rem;
         font-size: 1.25rem;
         padding: 0 1rem;
+    }
+
+    button {
+
     }
 
     ul {
@@ -81,7 +61,7 @@ const homePageStyles = css`
     li p {
         text-align: center;
         color: white;
-        font-size: 1.15rem;
+        font-size: 1.25rem;
         margin: 0;
     }
 
@@ -93,7 +73,8 @@ const homePageStyles = css`
 
     @media (max-width: 480px) {
         ul {
-            grid-template-columns: repeat(2, 1fr);
+            /* grid-template-columns: repeat(3, 1fr); */
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             margin: 0;
             gap: 0;
             justify-content: center;
@@ -105,6 +86,10 @@ const homePageStyles = css`
 
         li a {
             font-size: 1.5rem;
+        }
+
+        input {
+            font-size: 16px;
         }
     }
 `
@@ -161,8 +146,9 @@ function HomePage() {
                 e.preventDefault()
                 setSearchParams({ q: inputQuery })
             }}>
-                <input value={inputQuery} onChange={e => setInputQuery(e.target.value)} />
-                <button type="submit">Search</button>
+                <input value={inputQuery} placeholder='Search for a show' onChange={e => setInputQuery(e.target.value)} />
+                {/* <button type="submit">Search</button> */}
+                {/* <FontAwesomeIcon className='searchIcon' onClick={console.log('clicked')} icon={faMagnifyingGlass} /> */}
             </form>
             </div>
             {error && <ErrorContainer>Error: {error.message}</ErrorContainer>}
@@ -183,17 +169,10 @@ function HomePage() {
                                 onClick={() => navigate(`shows/${show.show.id}`)}
                             />
                           )}
-                        <br />
                         <p>{show.show.name}</p>
                     </li>
                 ))}
             </ul>
-            <header className="App-header">
-                <img src={logo} className="App-logo" alt="logo" />
-                <p>
-                    🚧 Under Development 🚧
-                </p>
-            </header>
         </div>
     )
 }
