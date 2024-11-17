@@ -122,6 +122,7 @@ const ratingStyles = css`
     .star {
         cursor: pointer;
         font-size: 2.5rem;
+        color: #d73f09
     }
 
     button {
