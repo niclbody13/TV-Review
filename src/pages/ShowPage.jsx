@@ -8,7 +8,7 @@ import { faStarHalfStroke as halfStar } from '@fortawesome/free-regular-svg-icon
 import { Amplify } from 'aws-amplify'
 import outputs from '../../amplify_outputs.json'
 import { fetchUserAttributes } from 'aws-amplify/auth'
-
+import StarRating from '../components/StarRating'
 import noImage from "../assets/no-image.jpg"
 import ErrorContainer from '../components/ErrorContainer'
 import Spinner from '../components/Spinner'
@@ -82,6 +82,9 @@ const showStyles = css`
         .showWrapper h1 {
             /* font-size: 1rem; */
         }  
+        img {
+            /* scale: 0.1/; */
+        }
     }
 `
 
@@ -108,6 +111,7 @@ const seasonsStyles = css`
 const ratingStyles = css`
     h1 {
        margin-bottom: 1rem !important;
+       font-size: 2rem !important;
     }
 
     .starContainer {
@@ -117,24 +121,33 @@ const ratingStyles = css`
 
     .star {
         cursor: pointer;
+        font-size: 2.5rem;
     }
 
     button {
         margin: 1rem 0;
         margin-right: 1rem;
+        cursor: pointer;
+        color: white;
+        background-color: #333;
+        border-radius: 15px;
+        border: 1px solid black;
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
     }
 
     @media(max-width: 760px) {
         .star {
-            font-size: 1.25rem;
+            font-size: 2.25rem;
         }
 
         .starContainer {
-            margin: 0.5rem;
+            /* margin: 0.5rem; */
         }
 
         button {
             margin: 0.75rem;
+            padding: 0.25rem 0.5rem;
         }
 
         @media (max-width: 480px) {
@@ -145,10 +158,15 @@ const ratingStyles = css`
                 background-color: #333;
                 border-radius: 15px;
                 border: 1px solid black;
+                padding: 0;
             }
             
             h1 {
                 font-size: 1rem !important;
+            }
+
+            .star {
+                font-size: 2rem;
             }
         }
     }
@@ -257,6 +275,7 @@ function ShowPage() {
                     throw errorData
                 }
                 const ratingData = await response.json()
+                console.log("rating:", ratingData.body.rating)
                 setRating(ratingData.body.rating || 0)
                 setIsRated(!!ratingData.body.rating)
             } catch (e) {
@@ -388,37 +407,17 @@ function ShowPage() {
                                 <img src={showData.image.medium} alt={`Poster for ${showData.name}`} />
                             )}
                         </div>
-                        <div css={ratingStyles}>
+                        <div className='ratingInput' css={ratingStyles}>
                             {isRated ?
                                 <h1>You've rated this show</h1> :
                                 <h1>Rate this show</h1>
                             }
                             <div className='starContainer' onMouseLeave={resetStarHover}>
-                                {[...Array(5)].map((_, index) => {
-                                    const isFilled = hoverRating > 0 && index < Math.floor(hoverRating)
-                                    const isHalf = hoverRating > 0 && index === Math.floor(hoverRating) && (hoverRating % 1 !== 0)
-                                    const isFinalFilled = rating > 0 && index < Math.floor(rating)
-                                    const isFinalHalf = rating > 0 && index === Math.floor(rating) && (rating % 1 !== 0)
-                                    const icon = hoverRating > 0
-                                        ? (isFilled ? filledStar : (isHalf ? halfStar : emptyStar))
-                                        : (isFinalFilled ? filledStar : (isFinalHalf ? halfStar : emptyStar))
-
-                                    // console.log("isFilled: ", isFilled)
-
-                                    return (
-                                        <FontAwesomeIcon
-                                            key={index}
-                                            onClick={(e) => toggleStar(index, e)}
-                                            onMouseMove={(e) => handleStarHover(index, e)}
-                                            className='star'
-                                            icon={icon}
-                                            size='2xl'
-                                        />
-                                    )
-                                })}
+                                <StarRating className='star' value={rating} onChange={(newValue) => {
+                                    setRating(newValue)
+                                }} />
                             </div>
                             <button onClick={() => rateShow(showData.id, showData.name, showData.image.medium, rating)}>Submit Rating</button>
-                            {/* <button onClick={() => rateShow(showData.id, rating)}>Submit Rating</button> */}
                             <button onClick={() => deleteRating(showData.id)}>Delete Rating</button>
                         </div>
                     </div>
