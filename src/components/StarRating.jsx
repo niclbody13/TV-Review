@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Rating from '@mui/material/Rating';
+import { styled } from '@mui/material/styles';
 
 const StarRating = ({ onChange, value, ...props }) => {
   const [hoverValue, setHoverValue] = useState(value || 0);
@@ -74,4 +75,10 @@ const StarRating = ({ onChange, value, ...props }) => {
   );
 };
 
-export default StarRating;
+const CustomStars = styled(StarRating)({
+  '.MuiRating-root': {
+    color: '#d73f09',
+  }
+})
+
+export default CustomStars;
