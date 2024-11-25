@@ -22,27 +22,6 @@ const homePageStyles = css`
         color: black;
     }
 
-    form {
-        display: flex;
-        justify-content: center;
-        gap: 1em;
-        margin: 2rem;
-        /* background-color: #fff; */
-    }
-
-    input {
-        width: 24rem;
-        border-radius: 15px;
-        border: none;
-        height: 2rem;
-        font-size: 1.25rem;
-        padding: 0 1rem;
-    }
-
-    button {
-
-    }
-
     ul {
         list-style: none;
         padding: 0;
@@ -94,13 +73,54 @@ const homePageStyles = css`
     }
 `
 
+const formStyles = css`
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+    margin: 2rem;
+    
+    .inputContainer {
+        position: relative;
+        display: inline-block;
+        
+    }
+
+    input {
+        padding-right: 30px;
+        width: 20rem;
+        border-radius: 15px;
+        border: none;
+        height: 2rem;
+        font-size: 1.1rem;
+        padding: 0 1rem;
+    }
+
+    button {
+        position: absolute;
+        top: 50%;
+        right: 5px;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1.5rem;
+        color: #333;
+        padding: 0;
+    }
+
+    button:hover {
+        color: red;
+    }
+
+`
+
 function HomePage() {
-    const [ searchParams, setSearchParams ] = useSearchParams()
+    const [searchParams, setSearchParams] = useSearchParams()
     const query = searchParams.get("q")
-    const [ inputQuery, setInputQuery ] = useState(query || "")
-    const [ shows, setShows ] = useState([])
-    const [ loading, setLoading ] = useState(false)
-    const [ error, setError ] = useState(null)
+    const [inputQuery, setInputQuery] = useState(query || "")
+    const [shows, setShows] = useState([])
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState(null)
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -121,7 +141,7 @@ function HomePage() {
                 console.log(responseBody)
                 setError(null)
                 setShows(responseBody || [])
-            } catch(e) {
+            } catch (e) {
                 if (e.name === "AbortError") {
                     console.log("HTTP request was aborted")
                 } else {
@@ -132,7 +152,7 @@ function HomePage() {
                 setLoading(false)
             }
         }
-        if(query) {
+        if (query) {
             fetchShows()
         }
         return () => controller.abort()
@@ -141,15 +161,31 @@ function HomePage() {
     return (
         <div className="App" css={homePageStyles}>
             <div className="searchBar">
-            {/* Set the params based on the user input and pass it into the api endpoint */}
-            <form onSubmit={e => {
-                e.preventDefault()
-                setSearchParams({ q: inputQuery })
-            }}>
-                <input value={inputQuery} placeholder='Search for a show' onChange={e => setInputQuery(e.target.value)} />
-                {/* <button type="submit">Search</button> */}
-                {/* <FontAwesomeIcon className='searchIcon' onClick={console.log('clicked')} icon={faMagnifyingGlass} /> */}
-            </form>
+                <form
+                    css={formStyles}
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        setSearchParams({ q: inputQuery });
+                    }}
+                >
+                    <div className='inputContainer'>
+                        <input
+                            value={inputQuery}
+                            placeholder="Search for a show"
+                            onChange={(e) => setInputQuery(e.target.value)}
+                        />
+                        {inputQuery && (
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setInputQuery('')
+                                }}
+                            >
+                                &times;
+                            </button>
+                        )}
+                    </div>
+                </form>
             </div>
             {error && <ErrorContainer>Error: {error.message}</ErrorContainer>}
             {loading && <Spinner />}
@@ -157,18 +193,18 @@ function HomePage() {
                 {shows.map(show => (
                     <li className='showList' key={show.show.id}>
                         {show.show.image ?
-                         (<img 
-                            src={show.show.image.medium}
-                            alt={`Poster for ${show.show.name}`}
-                            onClick={() => navigate(`shows/${show.show.id}`)} />) :
-                          (
-                            <img 
-                                className="noImage"
-                                src={noImage} 
-                                alt="No image available"
-                                onClick={() => navigate(`shows/${show.show.id}`)}
-                            />
-                          )}
+                            (<img
+                                src={show.show.image.medium}
+                                alt={`Poster for ${show.show.name}`}
+                                onClick={() => navigate(`shows/${show.show.id}`)} />) :
+                            (
+                                <img
+                                    className="noImage"
+                                    src={noImage}
+                                    alt="No image available"
+                                    onClick={() => navigate(`shows/${show.show.id}`)}
+                                />
+                            )}
                         <p>{show.show.name}</p>
                     </li>
                 ))}
