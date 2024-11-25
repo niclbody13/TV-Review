@@ -80,8 +80,8 @@ function ReviewsPage() {
     const [error, setError] = useState(null)
     const [reviews, setReviews] = useState([])
     const navigate = useNavigate()
-    const [ userId, setUserId ] = useState(null)
-    const [ isUserIdReady, setIsUserIdReady ] = useState(false)
+    const [userId, setUserId] = useState(null)
+    const [isUserIdReady, setIsUserIdReady] = useState(false)
 
     useEffect(() => {
         const getUserId = async () => {
@@ -97,8 +97,8 @@ function ReviewsPage() {
     }, []);
 
     useEffect(() => {
-        if(!isUserIdReady) return
-        
+        if (!isUserIdReady) return
+
         async function getReviews() {
             setLoading(true)
             try {
@@ -124,7 +124,19 @@ function ReviewsPage() {
     return (
         <div css={reviewsPageStyles}>
             {error && <ErrorContainer>Error: {error}</ErrorContainer>}
-            {loading && <Spinner />}
+            {loading && (<div css={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                width: '100vw',
+                height: '100vh',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                zIndex: 1000,
+            }}>
+                <Spinner />
+            </div>)}
             {reviews && (
                 <ul>
                     {reviews.map(review => (
