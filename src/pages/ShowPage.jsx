@@ -269,6 +269,7 @@ function ShowPage() {
         if (!isUserIdReady || !isShowDataReady) return
         async function fetchUserRating() {
             // const userId = 1    // set userId to 1 until login is implemented
+            setLoading(true)
             try {
                 const response = await fetch(`${import.meta.env.VITE_AWS_GATEWAY_URL}/ratings/${userId}/${id}`)
                 if (!response.ok) {
@@ -281,6 +282,8 @@ function ShowPage() {
                 setIsRated(!!ratingData.body.rating)
             } catch (e) {
                 console.error('Failed to fetch rating: ', e)
+            } finally {
+                setLoading(false)
             }
         }
 
@@ -297,6 +300,7 @@ function ShowPage() {
     async function rateShow(showId, showName, showImage, rating) {
         // const userId = 1    // set userId to 1 until login is implemented
         console.log("Rating: ", rating)
+        setLoading(true)
         try {
             const method = isRated ? 'PATCH' : 'POST'
             const response = await fetch(`${import.meta.env.VITE_AWS_GATEWAY_URL}/ratings`, {
@@ -313,11 +317,14 @@ function ShowPage() {
         } catch (e) {
             console.error("An error has occurred: ", e)
             setError(e.error || 'Failed to rate show')
+        } finally {
+            setLoading(false)
         }
     }
 
     async function deleteRating(showId) {
         // const userId = 1    // set userId to 1 until login is implemented
+        setLoading(true)
         try {
             const response = await fetch(`${import.meta.env.VITE_AWS_GATEWAY_URL}/ratings/${userId}/${showId}`, {
                 method: 'DELETE',
@@ -338,6 +345,8 @@ function ShowPage() {
                 console.error("An error has occurred: ", e)
                 setError(e.error || 'Failed to delete rating')
             }
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -382,17 +391,32 @@ function ShowPage() {
 
     return (
         <div css={showStyles}>
-            {error && <ErrorContainer>Error: {error}</ErrorContainer>}
-            {loading && <Spinner />}
-            {showData && (
-                <div className='showWrapper'>
-                    <div className='mainInfo'>
-                        <div>
-                            <h1>{showData.name}</h1>
-                            {seasons.length > 0 && (
-                                <div css={seasonsStyles}>
-                                    <p>{seasons.length} Seasons</p>
-                                    {/* <ul>
+            {/* {error && <ErrorContainer>Error: {error}</ErrorContainer>} */}
+            {/* {loading && <Spinner />} */}
+            {loading ? (<div css={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                width: '100vw',
+                height: '100vh',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                zIndex: 1000,
+            }}>
+                <Spinner />
+            </div>) : (
+                <div>
+                    {error && <ErrorContainer>Error: {error}</ErrorContainer>}
+                    {showData && (
+                        <div className='showWrapper'>
+                            <div className='mainInfo'>
+                                <div>
+                                    <h1>{showData.name}</h1>
+                                    {seasons.length > 0 && (
+                                        <div css={seasonsStyles}>
+                                            <p>{seasons.length} Seasons</p>
+                                            {/* <ul>
                                     {seasons.map(season => (
                                         <li key={season.id}>
                                             <h3>Season {season.number}</h3>
@@ -401,30 +425,34 @@ function ShowPage() {
                                         </li>
                                     ))}
                                 </ul> */}
-                                    {showData.premiered ? (<p id='runtime'>({showData.premiered.split('-')[0]} - {showData.ended ? showData.ended.split('-')[0] : ''})</p>) : null}
+                                            {showData.premiered ? (<p id='runtime'>({showData.premiered.split('-')[0]} - {showData.ended ? showData.ended.split('-')[0] : ''})</p>) : null}
+                                        </div>
+                                    )}
+                                    {showData.image && (
+                                        <img src={showData.image.medium} alt={`Poster for ${showData.name}`} />
+                                    )}
                                 </div>
-                            )}
-                            {showData.image && (
-                                <img src={showData.image.medium} alt={`Poster for ${showData.name}`} />
-                            )}
-                        </div>
-                        <div className='ratingInput' css={ratingStyles}>
-                            {isRated ?
-                                <h1>You've rated this show</h1> :
-                                <h1>Rate this show</h1>
-                            }
-                            <div className='starContainer' onMouseLeave={resetStarHover}>
-                                <StarRating className='star' value={rating} onChange={(newValue) => {
-                                    setRating(newValue)
-                                }} />
+                                <div className='ratingInput' css={ratingStyles}>
+                                    {isRated ?
+                                        <h1>You've rated this show</h1> :
+                                        <h1>Rate this show</h1>
+                                    }
+                                    <div className='starContainer' onMouseLeave={resetStarHover}>
+                                        <StarRating className='star' value={rating} onChange={(newValue) => {
+                                            setRating(newValue)
+                                        }} />
+                                    </div>
+                                    <button onClick={() => rateShow(showData.id, showData.name, showData.image.medium, rating)}>Submit Rating</button>
+                                    <button onClick={() => deleteRating(showData.id)}>Delete Rating</button>
+                                </div>
                             </div>
-                            <button onClick={() => rateShow(showData.id, showData.name, showData.image.medium, rating)}>Submit Rating</button>
-                            <button onClick={() => deleteRating(showData.id)}>Delete Rating</button>
+                            <p className='description' dangerouslySetInnerHTML={{ __html: showData.summary }} />
                         </div>
-                    </div>
-                    <p className='description' dangerouslySetInnerHTML={{ __html: showData.summary }} />
+                    )}
                 </div>
             )}
+
+
         </div>
     )
 }
