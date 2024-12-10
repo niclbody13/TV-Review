@@ -3,14 +3,41 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import { Amplify } from 'aws-amplify';
-import outputs from '../amplify_outputs.json'
 import { Authenticator } from '@aws-amplify/ui-react'
 import { css } from '@emotion/react';
 import { signUp } from 'aws-amplify/auth';
 import '@aws-amplify/ui-react/styles.css';
 
 
-Amplify.configure(outputs)
+Amplify.configure({
+  Auth: {
+    Cognito: {
+      userPoolId: import.meta.env.VITE_AWS_USER_POOL_ID,
+      userPoolClientId: import.meta.env.VITE_AWS_CLIENT_ID,
+      identityPoolId: import.meta.env.VITE_AWS_IDENTITY_POOL_ID,
+      loginWith: {
+        email: true,
+      },
+      signUpVerificationMethod: "code",
+      userAttributes: {
+        email: {
+          required: true,
+        },
+        preferred_username: {
+          required: true,
+        }
+      },
+      allowGuestAccess: true,
+      passwordFormat: {
+        minLength: 8,
+        requireLowercase: true,
+        requireUppercase: true,
+        requireNumbers: true,
+        requireSpecialCharacters: true,
+      },
+    },
+  },
+})
 
 const authenticatorStyles = css`
   .amplify-button--primary {
