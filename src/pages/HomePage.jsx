@@ -1,5 +1,5 @@
 import { css } from '@emotion/react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
@@ -55,16 +55,17 @@ const homePageStyles = css`
             /* grid-template-columns: repeat(3, 1fr); */
             grid-template-columns: repeat(3, minmax(0, 1fr));
             margin: 0;
-            gap: 0;
+            /* gap: 2rem; */
             justify-content: center;
-        }
-        
-        li {
-            scale: 0.75;
+            margin: 1rem;
         }
 
         li a {
             font-size: 1.5rem;
+        }
+
+        li p {
+            font-size: 0.9rem;
         }
 
         input {
@@ -82,7 +83,6 @@ const formStyles = css`
     .inputContainer {
         position: relative;
         display: inline-block;
-        
     }
 
     input {
@@ -122,6 +122,7 @@ function HomePage() {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
     const navigate = useNavigate()
+    const inputRef = useRef(null)
 
     useEffect(() => {
         const controller = new AbortController()    // used to cancel fetch request
@@ -166,6 +167,7 @@ function HomePage() {
                     onSubmit={(e) => {
                         e.preventDefault();
                         setSearchParams({ q: inputQuery });
+                        inputRef.current.blur()
                     }}
                 >
                     <div className='inputContainer'>
@@ -173,12 +175,14 @@ function HomePage() {
                             value={inputQuery}
                             placeholder="Search for a show"
                             onChange={(e) => setInputQuery(e.target.value)}
+                            ref={inputRef}
                         />
                         {inputQuery && (
                             <button
                                 type="button"
                                 onClick={() => {
                                     setInputQuery('')
+                                    setShows([])
                                 }}
                             >
                                 &times;
