@@ -46,22 +46,26 @@ const showStyles = css`
     .mainInfo {
         display: flex;
         gap: 4rem;
-        align-items: center;
+        align-items: end;
+        /* align-items: center; */
         flex-direction: row;
     }
 
     @media(max-width: 760px) {
         .showWrapper {
-            margin: 0 1rem;
+            margin: 1rem;
         }
         
         .showWrapper h1 {
-            font-size: 1.25rem;
-            margin: 0.25rem 0;
+            font-size: 1.3rem;
+            margin: 0;
+            /* white-space: nowrap; */
+            /* overflow: none; */
         }
 
         .mainInfo {
             gap: 1rem;
+            position: relative;
         }
 
         .mainInfo p {
@@ -79,11 +83,16 @@ const showStyles = css`
     }
 
     @media(max-width: 480px) {
+        .showWrapper {
+            /* margin-left: 0; */
+            /* margin-right: 0; */
+        }
+
         .showWrapper h1 {
             /* font-size: 1rem; */
         }  
         img {
-            /* scale: 0.1/; */
+            height: 14rem;
         }
     }
 `
@@ -93,6 +102,7 @@ const seasonsStyles = css`
     flex-direction: row-reverse;
     justify-content: start;
     align-items: center;
+    white-space: nowrap;
 
     ul {
         display: flex;
@@ -109,6 +119,13 @@ const seasonsStyles = css`
 `
 
 const ratingStyles = css`
+    margin-bottom: 4rem;
+
+    .buttonContainer {
+        display: flex;
+        gap: 0;
+    }
+
     h1 {
        margin-bottom: 1rem !important;
        font-size: 2rem !important;
@@ -117,6 +134,7 @@ const ratingStyles = css`
     .starContainer {
         display: flex;
         gap: 0.25rem;
+        margin-bottom: 1rem;
     }
 
     .star {
@@ -126,8 +144,8 @@ const ratingStyles = css`
     }
 
     button {
-        margin: 1rem 0;
-        margin-right: 1rem;
+        /* margin: 1rem 0; */
+        margin: 0;
         cursor: pointer;
         color: white;
         background-color: #333;
@@ -152,14 +170,24 @@ const ratingStyles = css`
         }
 
         @media (max-width: 480px) {
+            .buttonContainer {
+                gap: 0;
+            }
+
             button {
-                width: 8rem;
+                width: 5rem;
                 font-size: 0.9rem;
                 color: white;
-                background-color: #333;
+                margin: 0.25rem;
+                /* background-color: #333; */
+                background-color: #095109;
                 border-radius: 15px;
                 border: 1px solid black;
-                padding: 0;
+                padding: 0.25rem 0;
+            }
+
+            #delete {
+                background-color: #7f0404;
             }
             
             h1 {
@@ -167,7 +195,7 @@ const ratingStyles = css`
             }
 
             .star {
-                font-size: 2rem;
+                font-size: 2.25rem;
             }
         }
     }
@@ -185,6 +213,7 @@ function ShowPage() {
     let { id } = useParams()
     const [userId, setUserId] = useState(null)
     const [isUserIdReady, setIsUserIdReady] = useState(false)
+    const [hasShowEnded, setHasShowEnded] = useState(false)
 
     useEffect(() => {
         const getUserId = async () => {
@@ -217,6 +246,7 @@ function ShowPage() {
                 console.log(responseBody)
                 setError(null)
                 setShowData(responseBody)
+                setHasShowEnded(responseBody.ended)
                 setIsShowDataReady(true)
             } catch (e) {
                 if (e.name === "AbortError") {
@@ -410,9 +440,10 @@ function ShowPage() {
                     {error && <ErrorContainer>Error: {error}</ErrorContainer>}
                     {showData && (
                         <div className='showWrapper'>
-                            <div className='mainInfo'>
+                            {/* <div className='mainInfo'> */}
+                            <h1>{showData.name}</h1>
+                            <div className='mainInfo' style={{gap: hasShowEnded ? '0' : '1rem'}}>
                                 <div>
-                                    <h1>{showData.name}</h1>
                                     {seasons.length > 0 && (
                                         <div css={seasonsStyles}>
                                             <p>{seasons.length} Seasons</p>
@@ -442,8 +473,10 @@ function ShowPage() {
                                             setRating(newValue)
                                         }} />
                                     </div>
-                                    <button onClick={() => rateShow(showData.id, showData.name, showData.image.medium, rating)}>Submit Rating</button>
-                                    <button onClick={() => deleteRating(showData.id)}>Delete Rating</button>
+                                    <div className='buttonContainer'>
+                                        <button id='delete' onClick={() => deleteRating(showData.id)}>Delete</button>
+                                        <button onClick={() => rateShow(showData.id, showData.name, showData.image.medium, rating)}>Submit</button>
+                                    </div>
                                 </div>
                             </div>
                             <p className='description' dangerouslySetInnerHTML={{ __html: showData.summary }} />
