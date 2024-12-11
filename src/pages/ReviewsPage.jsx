@@ -30,7 +30,7 @@ const reviewsPageStyles = css`
     li {
         display: flex;
         flex-direction: column;
-        gap: 0.25rem;
+        gap: 0.5rem;
         align-items: center;
     }
 
@@ -59,7 +59,7 @@ const reviewsPageStyles = css`
 
     @media(max-width: 760px) {
         ul {
-            margin: 1rem;
+            margin: 1rem 1rem;
             grid-template-columns: repeat(auto-fill, minmax(125px, 1fr));
         }
 
@@ -71,6 +71,15 @@ const reviewsPageStyles = css`
     @media(max-width: 480px) {
         ul {
             /* grid-template-columns: repeat(2, minmax(0, 1fr)); */
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+
+        li img {
+            width: 5rem;
+        }
+
+        .star {
+            font-size: 0.65rem;
         }
     }
 `
@@ -154,7 +163,6 @@ function ReviewsPage() {
                                         onClick={() => navigate(`/shows/${review.showId}`)}
                                     />
                                 )}
-                            <p>{review.showName}</p>
                             <div className='starContainer'>
                                 {[...Array(5)].map((_, index) => {
                                     let icon
