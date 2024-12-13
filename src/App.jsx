@@ -18,19 +18,25 @@ const globalStyles = css`
   }
 `;
 
+const mainContentStyles = css`
+  padding-bottom: 70px;   // make room for navbar
+`
+
 function App() {
   return (
     <>
       <Global styles={globalStyles} />
       <Navbar />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/reviews" element={<ReviewsPage />} />
-        <Route path="/friends" element={<FriendsPage />} />
-        <Route path='/shows/:id' element={<ShowPage />} />
-        <Route path='account' element={<AccountPage />} />
-        <Route path='*' element={<ErrorPage />} />
-      </Routes>
+      <div css={mainContentStyles}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/reviews" element={<ReviewsPage />} />
+          <Route path="/friends" element={<FriendsPage />} />
+          <Route path='/shows/:id' element={<ShowPage />} />
+          <Route path='account' element={<AccountPage />} />
+          <Route path='*' element={<ErrorPage />} />
+        </Routes>
+      </div>
     </>
   )
 }
