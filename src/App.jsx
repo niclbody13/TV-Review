@@ -7,6 +7,7 @@ import FriendsPage from './pages/FriendsPage'
 import ShowPage from './pages/ShowPage'
 import AccountPage from './pages/AccountPage'
 import ErrorPage from './pages/ErrorPage'
+import ScrollToTop from './components/ScrollToTop';
 
 const globalStyles = css`
   body {
@@ -25,6 +26,7 @@ const mainContentStyles = css`
 function App() {
   return (
     <>
+      <ScrollToTop />
       <Global styles={globalStyles} />
       <Navbar />
       <div css={mainContentStyles}>
