@@ -12,11 +12,14 @@ const accountStyles = css`
 
     button {
         width: 8rem;
-        font-size: 0.9rem;
+        font-size: 1rem;
         color: white;
-        background-color: #333;
+        background-color: #555;
+        box-shadow: 0px 2px 4px 0 #111;
         border-radius: 15px;
+        padding: 1rem 0rem;
         border: 1px solid black;
+        cursor: pointer;
     }
 `
 
