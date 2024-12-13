@@ -19,6 +19,7 @@ const accountStyles = css`
         border-radius: 15px;
         padding: 1rem 0rem;
         border: 1px solid black;
+        cursor: pointer;
     }
 `
 
