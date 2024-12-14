@@ -17,7 +17,7 @@ const accountStyles = css`
         background-color: #555;
         box-shadow: 0px 2px 4px 0 #111;
         border-radius: 15px;
-        padding: 1rem 0rem;
+        padding: 0.5rem 0rem;
         border: 1px solid black;
         cursor: pointer;
     }
@@ -30,6 +30,7 @@ function AccountPage() {
         const getUserData = async () => {
             try {
                 const attributes = await fetchUserAttributes();
+                console.log(attributes)
                 setUserAttributes(attributes)
             } catch (error) {
                 console.error("Error fetching user attributes:", error);
