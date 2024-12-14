@@ -88,14 +88,16 @@ const formStyles = css`
     input {
         padding-right: 30px;
         width: 20rem;
-        border-radius: 15px;
+        border-radius: 10px;
         border: none;
         height: 2rem;
-        font-size: 1.1rem;
+        font-size: 1rem;
         padding: 0 1rem;
+        padding-left: 1.5rem;
+        box-shadow: 0 2px 4px 0 #111;
     }
 
-    button {
+    #clearTextButton {
         position: absolute;
         top: 50%;
         right: 5px;
@@ -108,8 +110,17 @@ const formStyles = css`
         padding: 0;
     }
 
-    button:hover {
+    #clearTextButton:hover {
         color: red;
+    }
+
+    #searchIcon {
+        font-size: 0.8rem;
+        position: absolute;
+        color: #666;
+        top: 50%; 
+        left: 5px;
+        transform: translateY(-50%);
     }
 
 `
@@ -171,6 +182,7 @@ function HomePage() {
                     }}
                 >
                     <div className='inputContainer'>
+                        <FontAwesomeIcon id='searchIcon' icon={faMagnifyingGlass} />
                         <input
                             value={inputQuery}
                             placeholder="Search for a show"
@@ -179,6 +191,7 @@ function HomePage() {
                         />
                         {inputQuery && (
                             <button
+                                id='clearTextButton'
                                 type="button"
                                 onClick={() => {
                                     setInputQuery('')
