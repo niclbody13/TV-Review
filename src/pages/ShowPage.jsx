@@ -155,6 +155,10 @@ const ratingStyles = css`
         font-size: 0.9rem;
     }
 
+    .MuiRating-iconEmpty {
+        color: #111;
+    }
+
     @media(max-width: 760px) {
         .star {
             font-size: 2.25rem;
@@ -184,6 +188,7 @@ const ratingStyles = css`
                 border-radius: 15px;
                 border: 1px solid black;
                 padding: 0.25rem 0;
+                box-shadow: 0 2px 4px 0 #111;
             }
 
             #delete {
