@@ -13,7 +13,8 @@ const globalStyles = css`
   body {
     margin: 0;
     padding: 0;
-    font-family: 'Arial', sans-serif;
+    /* font-family: 'Arial', sans-serif; */
+    font-family: 'Roboto', sans-serif;
     background-color: #282c34;
     color: white;
   }
