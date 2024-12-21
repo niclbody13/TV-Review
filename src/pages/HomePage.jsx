@@ -4,6 +4,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 
+import logo from "../assets/television.svg"
 import noImage from "../assets/no-image.jpg"
 import ErrorContainer from '../components/ErrorContainer'
 import Spinner from '../components/Spinner'
@@ -11,6 +12,7 @@ import Spinner from '../components/Spinner'
 const homePageStyles = css`
     .App {
         text-align: center;
+        position: relative;
     }
 
     .searchBar {
@@ -125,6 +127,73 @@ const formStyles = css`
 
 `
 
+const logoStyles = css`
+    text-align: center;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 40%;
+    
+    .App-logo {
+        height: 50vmin;
+        pointer-events: none;
+        max-height: 18rem;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        .logoContainer {
+        animation: App-logo-spin infinite 6s linear;
+        }
+    }
+
+    .App-header {
+        background-color: #282c34;
+        min-height: 75vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: calc(10px + 2vmin);
+        color: white;
+        position: relative;
+    }
+
+    .App-link {
+        color: #61dafb;
+    }
+
+    @keyframes App-logo-spin {
+        from {
+        transform: rotateY(0deg);
+        }
+        to {
+        transform: rotateY(360deg);
+        }
+    }
+
+    p {
+        position: absolute;
+        top: 50%;
+        right: 43%;
+        font-family: "Anton", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+        font-size: 5vmin; /* Use vmin so it scales with the logo */
+        font-size: clamp(0.1rem, 5vmin, 2rem);
+        line-height: 1.2; /* Adjust the line height */
+        z-index: 2; /* So it stays on top of the logo */
+        color: white; /* Ensure the text is visible */
+        /* color: black; */
+        margin: 0;
+    }
+
+    @media(min-width: 700px) {
+        .logoContainer {
+            display: none;
+        }
+    }
+`
+
 function HomePage() {
     const [searchParams, setSearchParams] = useSearchParams()
     const query = searchParams.get("q")
@@ -134,6 +203,7 @@ function HomePage() {
     const [error, setError] = useState(null)
     const navigate = useNavigate()
     const inputRef = useRef(null)
+    const [hasSearched, setHasSearched] = useState(false)
 
     useEffect(() => {
         const controller = new AbortController()    // used to cancel fetch request
@@ -170,6 +240,12 @@ function HomePage() {
         return () => controller.abort()
     }, [query])
 
+    useEffect(() => {
+        if (searchParams.toString()) {
+            setHasSearched(true);
+        }
+    }, [searchParams]);
+
     return (
         <div className="App" css={homePageStyles}>
             <div className="searchBar">
@@ -179,6 +255,7 @@ function HomePage() {
                         e.preventDefault();
                         setSearchParams({ q: inputQuery });
                         inputRef.current.blur()
+                        setHasSearched(true)
                     }}
                 >
                     <div className='inputContainer'>
@@ -195,7 +272,9 @@ function HomePage() {
                                 type="button"
                                 onClick={() => {
                                     setInputQuery('')
+                                    setSearchParams({})
                                     setShows([])
+                                    setHasSearched(false)
                                 }}
                             >
                                 &times;
@@ -206,6 +285,14 @@ function HomePage() {
             </div>
             {error && <ErrorContainer>Error: {error.message}</ErrorContainer>}
             {loading && <Spinner />}
+            {!hasSearched && (
+                <header css={logoStyles} className="App-header">
+                    <div className='logoContainer'>
+                        <p>Welcome to <br></br> ShowList!</p>
+                        <img src={logo} className="App-logo" alt="logo" />
+                    </div>
+                </header>
+            )}
             <ul>
                 {shows.map(show => (
                     <li className='showList' key={show.show.id}>
