@@ -144,8 +144,7 @@ const ratingStyles = css`
     }
 
     button {
-        /* margin: 1rem 0; */
-        margin: 0;
+        margin: 0.75rem;
         cursor: pointer;
         color: white;
         background-color: #095109;
@@ -172,34 +171,29 @@ const ratingStyles = css`
         .starContainer {
             /* margin: 0.5rem; */
         }
+    }
 
-        button {
-            margin: 0.75rem;
-            padding: 0.25rem 0.5rem;
+    @media (max-width: 480px) {
+        .buttonContainer {
+            gap: 0;
         }
 
-        @media (max-width: 480px) {
-            .buttonContainer {
-                gap: 0;
-            }
+        button {
+            width: 5rem;
+            font-size: 0.9rem;
+            color: white;
+            margin: 0.25rem;
+            border-radius: 15px;
+            border: 1px solid black;
+            padding: 0.25rem 0;
+        }
+        
+        h1 {
+            font-size: 1rem !important;
+        }
 
-            button {
-                width: 5rem;
-                font-size: 0.9rem;
-                color: white;
-                margin: 0.25rem;
-                border-radius: 15px;
-                border: 1px solid black;
-                padding: 0.25rem 0;
-            }
-            
-            h1 {
-                font-size: 1rem !important;
-            }
-
-            .star {
-                font-size: 2.25rem;
-            }
+        .star {
+            font-size: 2.25rem;
         }
     }
 `
