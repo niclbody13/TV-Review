@@ -148,11 +148,16 @@ const ratingStyles = css`
         margin: 0;
         cursor: pointer;
         color: white;
-        background-color: #333;
+        background-color: #095109;
+        box-shadow: 0 2px 4px 0 #111;
         border-radius: 15px;
         border: 1px solid black;
         padding: 0.5rem 1rem;
         font-size: 0.9rem;
+    }
+
+    #delete {
+        background-color: #7f0404;
     }
 
     .MuiRating-iconEmpty {
@@ -183,16 +188,9 @@ const ratingStyles = css`
                 font-size: 0.9rem;
                 color: white;
                 margin: 0.25rem;
-                /* background-color: #333; */
-                background-color: #095109;
                 border-radius: 15px;
                 border: 1px solid black;
                 padding: 0.25rem 0;
-                box-shadow: 0 2px 4px 0 #111;
-            }
-
-            #delete {
-                background-color: #7f0404;
             }
             
             h1 {
@@ -447,7 +445,7 @@ function ShowPage() {
                         <div className='showWrapper'>
                             {/* <div className='mainInfo'> */}
                             <h1>{showData.name}</h1>
-                            <div className='mainInfo' style={{gap: hasShowEnded ? '0' : '1rem'}}>
+                            <div className='mainInfo' style={{ gap: hasShowEnded ? '0' : '1rem' }}>
                                 <div>
                                     {seasons.length > 0 && (
                                         <div css={seasonsStyles}>
