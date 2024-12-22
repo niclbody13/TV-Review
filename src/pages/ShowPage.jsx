@@ -322,7 +322,7 @@ function ShowPage() {
         return `${month}/${day}/${year}`
     }
 
-    const seasons = seasonsData.filter(season => season.premiereDate)
+    const seasons = seasonsData.filter(season => parseInt(season.premiereDate))
 
     async function rateShow(showId, showName, showImage, rating) {
         // const userId = 1    // set userId to 1 until login is implemented
@@ -443,17 +443,12 @@ function ShowPage() {
                                 <div>
                                     {seasons.length > 0 && (
                                         <div css={seasonsStyles}>
-                                            <p>{seasons.length} Seasons</p>
-                                            {/* <ul>
-                                    {seasons.map(season => (
-                                        <li key={season.id}>
-                                            <h3>Season {season.number}</h3>
-                                            <p>Premiere: {formatDate(season.premiereDate)}</p>
-                                            <p>End: {formatDate(season.endDate) || '-'}</p>
-                                        </li>
-                                    ))}
-                                </ul> */}
-                                            {showData.premiered ? (<p id='runtime'>({showData.premiered.split('-')[0]} - {showData.ended ? showData.ended.split('-')[0] : ''})</p>) : null}
+                                            <p>{seasons.length} {seasons.length === 1 ? 'Season' : 'Seasons'}</p>
+                                            {showData.premiered && (
+                                                <p id="runtime">
+                                                    ({showData.premiered.split('-')[0]} - {showData.ended ? showData.ended.split('-')[0] : ''})
+                                                </p>
+                                            )}
                                         </div>
                                     )}
                                     {showData.image && (
