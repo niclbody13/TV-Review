@@ -69,7 +69,7 @@ function Navbar() {
                 </ActiveLink>
                 <ActiveLink to="/reviews">
                     <FontAwesomeIcon icon={faListUl} />
-                    <p>Reviews</p>
+                    <p>My List</p>
                 </ActiveLink>
                 <ActiveLink to="/friends">
                     <FontAwesomeIcon icon={faUserGroup} />
